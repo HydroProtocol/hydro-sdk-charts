@@ -1,21 +1,20 @@
 import React, { PureComponent } from 'react';
 import { OrderbookDeepChart } from './deepChartCanvas';
 import { themeDark, themeLight } from '../variables/variables';
+import { setBids, setAsks } from './memoryOrderbook';
 class DeepChart extends PureComponent {
     getVariables() {
         const { theme } = this.props;
         return theme === 'light' ? themeLight : themeDark;
     }
     getCommonOptions() {
-        const { baseToken, quoteToken, priceDecimals, amountDecimals, bids, asks, clickCallback, styles } = this.props;
+        const { baseToken, quoteToken, priceDecimals, amountDecimals, clickCallback, styles } = this.props;
         const variables = this.getVariables();
         return {
             height: -1,
             showFPS: false,
             priceDecimals,
             amountDecimals,
-            bids,
-            asks,
             baseTokenSymbol: baseToken,
             quoteTokenSymbol: quoteToken,
             titleColor: (styles && styles.titleColor) || variables.mainColor,
@@ -49,7 +48,16 @@ class DeepChart extends PureComponent {
             }
         };
     }
+    componentWillReceiveProps(nextProps) {
+        console.log('componentWillReceiveProps');
+        console.log(nextProps);
+        setBids(nextProps.bids);
+        setAsks(nextProps.asks);
+    }
     componentDidMount() {
+        const { bids, asks } = this.props;
+        setBids(bids);
+        setAsks(asks);
         const commonOptions = this.getCommonOptions();
         this.chart = new OrderbookDeepChart('deep-chart', commonOptions);
         this.chart.start();

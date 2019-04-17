@@ -1,8 +1,23 @@
 import { BaseCanvas } from '../lib/baseCanvas';
 import { roundRect } from '../lib/canvasUtils';
-// import { asks, bids } from './constants';
+import { asks, bids } from './memoryOrderbook';
 import { capitalizeFirstLetter } from '../lib/utils';
 import BigNumber from 'bignumber.js';
+const sortData = (unsortedData, dataOrder = 'asc') => {
+    unsortedData.sort((a, b) => {
+        if (a[0].eq(b[0])) {
+            return 0;
+        }
+        else {
+            if (dataOrder === 'asc') {
+                return a[0].lt(b[0]) ? -1 : 1;
+            }
+            else {
+                return a[0].lt(b[0]) ? 1 : -1;
+            }
+        }
+    });
+};
 export class OrderbookDeepChart extends BaseCanvas {
     constructor(id, options) {
         super(id, options);
@@ -504,34 +519,16 @@ export class OrderbookDeepChart extends BaseCanvas {
         return this.bids[0][0].add(this.asks[0][0]).div(2);
     }
     prepareData() {
-        const sortData = (unsortedData, dataOrder = 'asc') => {
-            unsortedData.sort((a, b) => {
-                if (a[0].eq(b[0])) {
-                    return 0;
-                }
-                else {
-                    if (dataOrder === 'asc') {
-                        return a[0].lt(b[0]) ? -1 : 1;
-                    }
-                    else {
-                        return a[0].lt(b[0]) ? 1 : -1;
-                    }
-                }
-            });
-        };
-        const { bids, asks } = this.options;
         this.bids = bids.map(bid => {
+            // @ts-ignore
             return [new BigNumber(bid.price), new BigNumber(bid.amount)];
         });
         sortData(this.bids, 'desc');
         this.asks = asks.map(ask => {
+            // @ts-ignore
             return [new BigNumber(ask.price), new BigNumber(ask.amount)];
         });
         sortData(this.asks, 'asc');
-        // this.bids = memoryOrderbook.bids;
-        // this.asks = memoryOrderbook.asks;
-        // console.log('bids: ', this.bids);
-        // console.log('asks: ', this.asks);
         this.price = this.getMiddlePrice();
         const range = this.getRange();
         let bidAmount = new BigNumber(0);

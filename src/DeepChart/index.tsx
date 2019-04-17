@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import BigNumber from 'bignumber.js';
 import { OrderbookDeepChart } from './deepChartCanvas';
 import { themeDark, themeLight } from '../variables/variables';
+import { setBids, setAsks } from './memoryOrderbook';
 
 interface Styles {
   titleColor?: string;
@@ -36,15 +37,13 @@ class DeepChart extends PureComponent<Props, any> {
   }
 
   public getCommonOptions() {
-    const { baseToken, quoteToken, priceDecimals, amountDecimals, bids, asks, clickCallback, styles } = this.props;
+    const { baseToken, quoteToken, priceDecimals, amountDecimals, clickCallback, styles } = this.props;
     const variables = this.getVariables();
     return {
       height: -1,
       showFPS: false,
       priceDecimals,
       amountDecimals,
-      bids,
-      asks,
       baseTokenSymbol: baseToken,
       quoteTokenSymbol: quoteToken,
       titleColor: (styles && styles.titleColor) || variables.mainColor,
@@ -77,7 +76,18 @@ class DeepChart extends PureComponent<Props, any> {
     };
   }
 
+  public componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps');
+    console.log(nextProps);
+    setBids(nextProps.bids);
+    setAsks(nextProps.asks);
+  }
+
   public componentDidMount() {
+    const { bids, asks } = this.props;
+    setBids(bids);
+    setAsks(asks);
+
     const commonOptions = this.getCommonOptions();
     this.chart = new OrderbookDeepChart('deep-chart', commonOptions);
     this.chart.start();
