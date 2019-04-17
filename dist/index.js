@@ -1,3 +1,4 @@
 import TradeChart from './TradeChart/index';
-export { TradeChart };
+import DeepChart from './DeepChart/index';
+export { TradeChart, DeepChart };
 //# sourceMappingURL=index.js.map
