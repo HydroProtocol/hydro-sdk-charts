@@ -1,0 +1,42 @@
+.chartSelection {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px;
+  margin-left: 0;
+  margin-right: 0; }
+  .chartSelection .selection1 {
+    width: 80px; }
+  .chartSelection .selection2 {
+    width: 80px;
+    margin-left: 8px; }
+  .chartSelection .selection3 {
+    width: 80px;
+    margin-left: 8px; }
+
+.chartLoading {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  z-index: 999;
+  left: 50%;
+  margin-left: -18px;
+  top: 50%;
+  margin-top: -18px; }
+
+.react-stockcharts-x-axis .tick line,
+.react-stockcharts-y-axis .tick line {
+  display: none; }
+
+.react-stockcharts-tooltip-hover text tspan:nth-of-type(1),
+.react-stockcharts-tooltip-hover text tspan:nth-of-type(2) {
+  display: none; }
+
+.react-stockcharts-tooltip-hover text tspan {
+  white-space: pre; }
+
+.react-stockcharts-tooltip {
+  cursor: default; }
+
+line[stroke='none'] {
+  stroke: #00c6a3; }

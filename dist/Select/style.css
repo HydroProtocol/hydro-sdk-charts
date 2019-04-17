@@ -1,0 +1,87 @@
+.select {
+  position: relative;
+  flex: 1;
+  color: #fff; }
+  .select.unfolded .dropdown {
+    height: auto; }
+  .select .selected {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    padding: 0 12px;
+    height: 32px;
+    line-height: 32px;
+    background: #1d1c1c;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    .select .selected.small {
+      height: 22px;
+      line-height: 22px;
+      padding: 0 8px; }
+  .select .dropdown {
+    position: absolute;
+    border-radius: 2px;
+    height: 0;
+    z-index: 99999999999999999;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #1d1c1c; }
+    .select .dropdown.up {
+      bottom: 110%; }
+    .select .dropdown.down {
+      top: 110%; }
+  .select .item {
+    padding: 0 12px;
+    height: 32px;
+    line-height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom-width: 0;
+    border-top-width: 0;
+    cursor: pointer;
+    background: #1d1c1c; }
+    .select .item:hover {
+      background: rgba(255, 255, 255, 0.1); }
+    .select .item:first-child {
+      border-top-width: 1px;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px; }
+    .select .item:last-child {
+      border-bottom-width: 1px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px; }
+    .select .item.small {
+      height: 22px;
+      line-height: 22px;
+      padding: 0 8px; }
+    .select .item.disabled {
+      color: #97999a;
+      cursor: not-allowed; }
+  .select .caret {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 36px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    margin-top: 1px; }
+    .select .caret:before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #97999a;
+      border-radius: 2px; }
+    .select .caret.small {
+      height: 22px;
+      width: 24px; }

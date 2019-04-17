@@ -1,0 +1,26 @@
+{
+  "name": "hydro-sdk-charts",
+  "version": "0.1.0",
+  "description": "hydro sdk charts",
+  "main": "./dist/index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "npm run build-js && npm run build-css",
+    "build-js": "tsc -p .",
+    "build-css": "node-sass src/ --output dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "bignumber.js": "5",
+    "react-stockcharts": "^0.7.8"
+  },
+  "devDependencies": {
+    "@types/react": "^16.3.17",
+    "@types/react-dom": "^16.0.6",
+    "node-sass": "^4.11.0",
+    "typescript": "^3.4.3"
+  }
+}

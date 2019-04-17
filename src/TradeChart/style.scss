@@ -1,0 +1,64 @@
+@import '../variables/variables.scss';
+
+.chartSelection {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 12px;
+    margin-left: 0;
+    margin-right: 0;
+
+    .selection1 {
+        width: 80px;
+    }
+
+    .selection2 {
+        width: 80px;
+        margin-left: 8px;
+    }
+
+    .selection3 {
+        width: 80px;
+        margin-left: 8px;
+    }
+}
+
+.chartLoading {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    z-index: 999;
+    left: 50%;
+    margin-left: -18px;
+    top: 50%;
+    margin-top: -18px;
+}
+
+// stockcharts
+.react-stockcharts-x-axis,
+.react-stockcharts-y-axis {
+    .tick {
+        line {
+            display: none;
+        }
+    }
+}
+.react-stockcharts-tooltip-hover {
+    text {
+        tspan:nth-of-type(1),
+        tspan:nth-of-type(2) {
+            display: none;
+        }
+        tspan {
+            white-space: pre;
+        }
+    }
+}
+.react-stockcharts-tooltip {
+    cursor: default;
+}
+// line stroke is using fill, but our fill with green border is none.
+// https://github.com/rrag/react-stockcharts/blob/6cc29406ee305a6011a8f9437d3f47deb549629d/src/lib/series/CandlestickSeries.js#L127
+line[stroke='none'] {
+    stroke: #00c6a3;
+}
