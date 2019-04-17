@@ -1,11 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import React, { Component } from 'react';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
@@ -22,7 +14,7 @@ import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip
 import { ClickCallback } from 'react-stockcharts/lib/interactive';
 import BigNumber from 'bignumber.js';
 import Select from '../Select';
-import { granularityOptions, chartOptions, overlayOptions, testData } from './constants';
+import { granularityOptions, chartOptions, overlayOptions } from './constants';
 import { themeDark, themeLight } from '../variables/variables';
 import './style.css';
 // one candle width is 18px * 0.5
@@ -40,25 +32,25 @@ class TradeChart extends Component {
             chart,
             granularityStr,
             isShowEMA12,
-            isShowEMA26,
-            loading: false,
-            noData: false,
-            data: [],
-            from: null,
-            to: null,
-            start: null,
-            end: null,
-            lastUpdatedAt: new Date().getTime() // for loadRight
+            isShowEMA26
+            // loading: false,
+            // noData: false,
+            // data: [],
+            // from: null,
+            // to: null,
+            // start: null,
+            // end: null,
+            // lastUpdatedAt: new Date().getTime() // for loadRight
         };
     }
     getVariables() {
         const { theme } = this.props;
         return theme === 'light' ? themeLight : themeDark;
     }
-    componentDidMount() {
-        this.loadData();
-        this.interval = window.setInterval(() => this.loadRight(), 60000);
-    }
+    // public componentDidMount() {
+    //   this.loadData();
+    //   this.interval = window.setInterval(() => this.loadRight(), 60000);
+    // }
     // public componentDidUpdate(prevProps) {
     //   if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
     //     this.setState({
@@ -75,24 +67,24 @@ class TradeChart extends Component {
             window.clearInterval(this.interval);
         }
     }
-    loadRight(granularityStr = null) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (new Date().getTime() - this.state.lastUpdatedAt > 59000) {
-                this.loadData(this.state.granularityStr, this.state.to);
-            }
-        });
-    }
-    loadLeft(start, end) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.loadData(this.state.granularityStr, null, this.state.from, start, end);
-        });
-    }
-    loadData(granularityStr = null, from = null, to = null, start = null, end = null) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.setState({ data: this.fixData(testData) });
-            return;
-        });
-    }
+    // public async loadRight(granularityStr: string | null = null) {
+    //   if (new Date().getTime() - this.state.lastUpdatedAt > 59000) {
+    //     this.loadData(this.state.granularityStr, this.state.to);
+    //   }
+    // }
+    // public async loadLeft(start: number, end: number) {
+    //   this.loadData(this.state.granularityStr, null, this.state.from, start, end);
+    // }
+    // public async loadData(
+    //   granularityStr: string | null = null,
+    //   from: number | null = null,
+    //   to: number | null = null,
+    //   start: number | null = null,
+    //   end: number | null = null
+    // ) {
+    //   this.setState({ data: this.fixData(testData) });
+    //   return;
+    // }
     //   const granularityIsSame: boolean = this.state.granularityStr === granularityStr;
     //   if (this.state.loading || (granularityIsSame && this.state.noData)) {
     //     return;
@@ -150,11 +142,16 @@ class TradeChart extends Component {
     //   this.setState({ loading: false });
     // }
     handleLoadMore(start, end) {
+        const { handleLoadMore } = this.props;
+        if (!handleLoadMore) {
+            return;
+        }
         start = Math.ceil(start);
         if (start === end) {
             return;
         }
-        this.loadLeft(start, end);
+        // this.loadLeft(start, end);
+        handleLoadMore(start, end);
     }
     fixData(data) {
         const fd = []; // fixedData
@@ -304,7 +301,7 @@ class TradeChart extends Component {
         })
             .accessor(d => d.ema12);
         const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(d => d.date);
-        let fixedData = this.state.data;
+        let fixedData = this.fixData(this.props.data);
         if (fixedData.length === 0) {
             const elem = {
                 date: new Date(),
@@ -408,7 +405,11 @@ class TradeChart extends Component {
         return (React.createElement("div", { className: "chartSelection" },
             React.createElement("div", { className: "selection1" },
                 React.createElement(Select, { size: 'small', options: granularityOptions, selected: this.state.granularityStr, onSelect: option => {
-                        this.loadData(option.value);
+                        // this.loadData(option.value);
+                        const { clickGranularity } = this.props;
+                        if (clickGranularity) {
+                            clickGranularity(option.value);
+                        }
                         window.localStorage.setItem('granularityStr', option.value);
                     } })),
             React.createElement("div", { className: "selection2" },

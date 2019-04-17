@@ -23,7 +23,7 @@ import { ClickCallback } from 'react-stockcharts/lib/interactive';
 
 import BigNumber from 'bignumber.js';
 import Select from '../Select';
-import { granularityOptions, chartOptions, overlayOptions, testData } from './constants';
+import { granularityOptions, chartOptions, overlayOptions } from './constants';
 import { themeDark, themeLight } from '../variables/variables';
 import './style.css';
 
@@ -38,6 +38,8 @@ interface Props {
   currentMarket: any;
   clickCallback?: any;
   theme?: any;
+  handleLoadMore?: any;
+  clickGranularity?: any;
 }
 
 class TradeChart extends Component<Props, any> {
@@ -57,15 +59,15 @@ class TradeChart extends Component<Props, any> {
       chart,
       granularityStr,
       isShowEMA12,
-      isShowEMA26,
-      loading: false,
-      noData: false,
-      data: [],
-      from: null,
-      to: null,
-      start: null,
-      end: null,
-      lastUpdatedAt: new Date().getTime() // for loadRight
+      isShowEMA26
+      // loading: false,
+      // noData: false,
+      // data: [],
+      // from: null,
+      // to: null,
+      // start: null,
+      // end: null,
+      // lastUpdatedAt: new Date().getTime() // for loadRight
     };
   }
 
@@ -74,10 +76,10 @@ class TradeChart extends Component<Props, any> {
     return theme === 'light' ? themeLight : themeDark;
   }
 
-  public componentDidMount() {
-    this.loadData();
-    this.interval = window.setInterval(() => this.loadRight(), 60000);
-  }
+  // public componentDidMount() {
+  //   this.loadData();
+  //   this.interval = window.setInterval(() => this.loadRight(), 60000);
+  // }
 
   // public componentDidUpdate(prevProps) {
   //   if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
@@ -97,26 +99,26 @@ class TradeChart extends Component<Props, any> {
     }
   }
 
-  public async loadRight(granularityStr: string | null = null) {
-    if (new Date().getTime() - this.state.lastUpdatedAt > 59000) {
-      this.loadData(this.state.granularityStr, this.state.to);
-    }
-  }
+  // public async loadRight(granularityStr: string | null = null) {
+  //   if (new Date().getTime() - this.state.lastUpdatedAt > 59000) {
+  //     this.loadData(this.state.granularityStr, this.state.to);
+  //   }
+  // }
 
-  public async loadLeft(start: number, end: number) {
-    this.loadData(this.state.granularityStr, null, this.state.from, start, end);
-  }
+  // public async loadLeft(start: number, end: number) {
+  //   this.loadData(this.state.granularityStr, null, this.state.from, start, end);
+  // }
 
-  public async loadData(
-    granularityStr: string | null = null,
-    from: number | null = null,
-    to: number | null = null,
-    start: number | null = null,
-    end: number | null = null
-  ) {
-    this.setState({ data: this.fixData(testData) });
-    return;
-  }
+  // public async loadData(
+  //   granularityStr: string | null = null,
+  //   from: number | null = null,
+  //   to: number | null = null,
+  //   start: number | null = null,
+  //   end: number | null = null
+  // ) {
+  //   this.setState({ data: this.fixData(testData) });
+  //   return;
+  // }
 
   //   const granularityIsSame: boolean = this.state.granularityStr === granularityStr;
   //   if (this.state.loading || (granularityIsSame && this.state.noData)) {
@@ -181,11 +183,17 @@ class TradeChart extends Component<Props, any> {
   // }
 
   public handleLoadMore(start, end) {
+    const { handleLoadMore } = this.props;
+    if (!handleLoadMore) {
+      return;
+    }
+
     start = Math.ceil(start);
     if (start === end) {
       return;
     }
-    this.loadLeft(start, end);
+    // this.loadLeft(start, end);
+    handleLoadMore(start, end);
   }
 
   public fixData(data) {
@@ -344,7 +352,7 @@ class TradeChart extends Component<Props, any> {
       .accessor(d => d.ema12);
 
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(d => d.date);
-    let fixedData = this.state.data;
+    let fixedData = this.fixData(this.props.data);
     if (fixedData.length === 0) {
       const elem = {
         date: new Date(),
@@ -550,7 +558,11 @@ class TradeChart extends Component<Props, any> {
             options={granularityOptions}
             selected={this.state.granularityStr}
             onSelect={option => {
-              this.loadData(option.value);
+              // this.loadData(option.value);
+              const { clickGranularity } = this.props;
+              if (clickGranularity) {
+                clickGranularity(option.value);
+              }
               window.localStorage.setItem('granularityStr', option.value);
             }}
           />
