@@ -1,11 +1,16 @@
 import React, { PureComponent } from 'react';
 import { OrderbookDeepChart } from './deepChartCanvas';
-import variables from '../variables/variables';
+import { themeDark, themeLight } from '../variables/variables';
 class DeepChart extends PureComponent {
+    getVariables() {
+        const { theme } = this.props;
+        return theme === 'light' ? themeLight : themeDark;
+    }
     getCommonOptions() {
-        const { baseToken, quoteToken, bids, asks, clickCallback } = this.props;
+        const { baseToken, quoteToken, bids, asks, clickCallback, styles } = this.props;
         const priceDecimals = this.props.priceDecimals || 5;
         const amountDecimals = this.props.amountDecimals || 2;
+        const variables = this.getVariables();
         return {
             height: -1,
             showFPS: false,
@@ -13,17 +18,17 @@ class DeepChart extends PureComponent {
             amountDecimals,
             bids,
             asks,
-            titleColor: variables.fontColor1,
-            axisLabelColor: variables.fontColor2,
-            axisColor: variables.borderGray,
-            rowBackgroundColor: variables.backgroundContainer,
-            containerBackgroundColor: variables.background,
             baseTokenSymbol: baseToken,
             quoteTokenSymbol: quoteToken,
-            red: variables.red,
-            redArea: variables.redArea,
-            green: variables.green,
-            greenArea: variables.greenArea,
+            titleColor: (styles && styles.titleColor) || variables.mainColor,
+            axisLabelColor: (styles && styles.axisLabelColor) || variables.secondColor,
+            axisColor: (styles && styles.axisColor) || variables.borderGray,
+            rowBackgroundColor: (styles && styles.rowBackgroundColor) || variables.backgroundContainer,
+            containerBackgroundColor: (styles && styles.containerBackgroundColor) || variables.background,
+            red: (styles && styles.red) || variables.red,
+            redArea: (styles && styles.redArea) || variables.redArea,
+            green: (styles && styles.green) || variables.green,
+            greenArea: (styles && styles.greenArea) || variables.greenArea,
             onClick: result => {
                 // console.log(result);
                 if (clickCallback) {

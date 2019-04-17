@@ -24,7 +24,7 @@ import { ClickCallback } from 'react-stockcharts/lib/interactive';
 import BigNumber from 'bignumber.js';
 import Select from '../Select';
 import { granularityOptions, chartOptions, overlayOptions, testData } from './constants';
-import variables from '../variables/variables';
+import { themeDark, themeLight } from '../variables/variables';
 import './style.css';
 
 // one candle width is 18px * 0.5
@@ -37,6 +37,7 @@ interface Props {
   height: any;
   currentMarket: any;
   clickCallback?: any;
+  theme?: any;
 }
 
 class TradeChart extends Component<Props, any> {
@@ -66,6 +67,11 @@ class TradeChart extends Component<Props, any> {
       end: null,
       lastUpdatedAt: new Date().getTime() // for loadRight
     };
+  }
+
+  public getVariables() {
+    const { theme } = this.props;
+    return theme === 'light' ? themeLight : themeDark;
   }
 
   public componentDidMount() {
@@ -319,10 +325,7 @@ class TradeChart extends Component<Props, any> {
 
   public render() {
     const { width, ratio, height, currentMarket, clickCallback } = this.props;
-    const chartGreenColor = variables.green;
-    const chartRedColor = variables.red;
-    const textGrayColor = variables.fontColor2;
-    const barColor = variables.chartBarColor;
+    const variables = this.getVariables();
 
     const ema26 = ema()
       .id(0)
@@ -408,7 +411,9 @@ class TradeChart extends Component<Props, any> {
     const priceLen = Math.floor(maxHigh).toString().length + priceDecimals;
     const marginRight = priceLen > 5 ? priceLen * 9 : 50;
     return (
-      <div style={{ height: '100%', position: 'relative' }} className="flex-column">
+      <div
+        style={{ height: '100%', position: 'relative', background: variables.background }}
+        className="hydro-sdk-TradeChart flex-column">
         {this.renderSelections()}
         {!(this.state.loading && this.state.data.length === 0) && (
           <ChartCanvas
@@ -435,12 +440,12 @@ class TradeChart extends Component<Props, any> {
               <XAxis
                 axisAt="bottom"
                 orient="bottom"
-                tickStroke={textGrayColor}
+                tickStroke={variables.secondColor}
                 stroke="none"
                 ticks={Math.ceil((width - marginRight) / 160)}
               />
               <MouseCoordinateX at="bottom" orient="bottom" displayFormat={timeFormat('%Y-%m-%d')} />
-              <BarSeries yAccessor={d => d.volume} fill={barColor} widthRatio={0.4} opacity={1} />
+              <BarSeries yAccessor={d => d.volume} fill={variables.chartBarColor} widthRatio={0.4} opacity={1} />
             </Chart>
             <Chart
               id={1}
@@ -465,7 +470,7 @@ class TradeChart extends Component<Props, any> {
                 axisAt="right"
                 orient="right"
                 ticks={5}
-                tickStroke={textGrayColor}
+                tickStroke={variables.secondColor}
                 stroke="none"
                 tickFormat={format(`.${priceDecimals}f`)}
               />
@@ -474,15 +479,15 @@ class TradeChart extends Component<Props, any> {
                   widthRatio={0.5}
                   opacity={1}
                   candleStrokeWidth="1"
-                  stroke={d => (d.close > d.open ? chartGreenColor : chartRedColor)}
-                  wickStroke={d => (d.close > d.open ? chartGreenColor : chartRedColor)}
-                  fill={d => (d.close > d.open ? 'none' : chartRedColor)}
+                  stroke={d => (d.close > d.open ? variables.green : variables.red)}
+                  wickStroke={d => (d.close > d.open ? variables.green : variables.red)}
+                  fill={d => (d.close > d.open ? 'none' : variables.red)}
                 />
               ) : (
                 <AreaSeries
                   yAccessor={d => d.close}
                   strokeWidth={2}
-                  stroke={chartGreenColor}
+                  stroke={variables.green}
                   fill="url(#LineGradient)"
                   interpolation={curveMonotoneX}
                 />
@@ -493,16 +498,16 @@ class TradeChart extends Component<Props, any> {
               {this.state.isShowEMA12 && <CurrentCoordinate yAccessor={ema12.accessor()} fill={ema12.stroke()} />}
               <MovingAverageTooltip
                 origin={[15, 8]}
-                textFill={textGrayColor}
+                textFill={variables.secondColor}
                 options={MovingAverageTooltipOptions}
                 displayFormat={format(`.${priceDecimals}f`)}
                 width={priceDecimals > 5 ? 65 + 6 * (priceDecimals - 5) : 65}
               />
               <defs>
                 <linearGradient id="LineGradient" x1="0" y1="100%" x2="0" y2="0%">
-                  <stop offset="0%" stopColor={chartGreenColor} stopOpacity={0} />
-                  <stop offset="50%" stopColor={chartGreenColor} stopOpacity={0.1} />
-                  <stop offset="100%" stopColor={chartGreenColor} stopOpacity={0.2} />
+                  <stop offset="0%" stopColor={variables.green} stopOpacity={0} />
+                  <stop offset="50%" stopColor={variables.green} stopOpacity={0.1} />
+                  <stop offset="100%" stopColor={variables.green} stopOpacity={0.2} />
                 </linearGradient>
               </defs>
               <EdgeIndicator
@@ -510,8 +515,8 @@ class TradeChart extends Component<Props, any> {
                 orient="right"
                 edgeAt="right"
                 yAccessor={d => d.close}
-                fill={d => (d.close > d.open ? chartGreenColor : chartRedColor)}
-                lineStroke={d => (d.close > d.open ? chartGreenColor : chartRedColor)}
+                fill={d => (d.close > d.open ? variables.green : variables.red)}
+                lineStroke={d => (d.close > d.open ? variables.green : variables.red)}
                 strokeWidth={0}
                 displayFormat={format(`.${priceDecimals}f`)}
                 rectWidth={priceLen > 5 ? priceLen * 9 : 50}
@@ -524,12 +529,12 @@ class TradeChart extends Component<Props, any> {
               />
               <OHLCTooltip
                 origin={[12, -2]}
-                textFill={textGrayColor}
-                labelFill={textGrayColor}
+                textFill={variables.secondColor}
+                labelFill={variables.secondColor}
                 ohlcFormat={v => format(`.${priceDecimals}f`)(v) + '  '}
               />
             </Chart>
-            <CrossHairCursor stroke="#FFFFFF" />
+            <CrossHairCursor stroke={variables.mainColor} />
           </ChartCanvas>
         )}
       </div>

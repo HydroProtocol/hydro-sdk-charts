@@ -3,7 +3,7 @@
 .select {
     position: relative;
     flex: 1;
-    color: $fontColor1;
+    color: $mainColor;
 
     &.unfolded {
         .dropdown {
@@ -84,7 +84,7 @@
         }
 
         &.disabled {
-            color: $fontColor2;
+            color: $secondColor;
             cursor: not-allowed;
         }
     }
@@ -110,7 +110,7 @@
             height: 0;
             border-left: 4px solid transparent;
             border-right: 4px solid transparent;
-            border-top: 5px solid $fontColor2;
+            border-top: 5px solid $secondColor;
             border-radius: $radius;
         }
 
