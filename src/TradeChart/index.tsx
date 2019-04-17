@@ -331,6 +331,11 @@ class TradeChart extends Component<Props, any> {
     }
   }
 
+  public changeScroll() {
+    let style = document.body.style.overflow;
+    document.body.style.overflow = style === 'hidden' ? 'auto' : 'hidden';
+  }
+
   public render() {
     const { width, ratio, height, currentMarket, clickCallback } = this.props;
     const variables = this.getVariables();
@@ -420,6 +425,8 @@ class TradeChart extends Component<Props, any> {
     const marginRight = priceLen > 5 ? priceLen * 9 : 50;
     return (
       <div
+        onMouseEnter={() => this.changeScroll()}
+        onMouseLeave={() => this.changeScroll()}
         style={{ height: '100%', position: 'relative', background: variables.backgroundContainer }}
         className="hydro-sdk-TradeChart flex-column">
         {this.renderSelections()}

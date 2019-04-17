@@ -283,6 +283,10 @@ class TradeChart extends Component {
             window.localStorage.setItem('isShowEMA26', `${!this.state.isShowEMA26}`);
         }
     }
+    changeScroll() {
+        let style = document.body.style.overflow;
+        document.body.style.overflow = style === 'hidden' ? 'auto' : 'hidden';
+    }
     render() {
         const { width, ratio, height, currentMarket, clickCallback } = this.props;
         const variables = this.getVariables();
@@ -365,7 +369,7 @@ class TradeChart extends Component {
         }
         const priceLen = Math.floor(maxHigh).toString().length + priceDecimals;
         const marginRight = priceLen > 5 ? priceLen * 9 : 50;
-        return (React.createElement("div", { style: { height: '100%', position: 'relative', background: variables.backgroundContainer }, className: "hydro-sdk-TradeChart flex-column" },
+        return (React.createElement("div", { onMouseEnter: () => this.changeScroll(), onMouseLeave: () => this.changeScroll(), style: { height: '100%', position: 'relative', background: variables.backgroundContainer }, className: "hydro-sdk-TradeChart flex-column" },
             this.renderSelections(),
             !(this.state.loading && this.state.data.length === 0) && (React.createElement(ChartCanvas, { height: chartHeight, ratio: ratio, width: width, margin: { left: 0, right: marginRight, top: 10, bottom: 30 }, type: 'svg', seriesName: "MSFT", data: data, xScale: this.state.xScale || xScale, xAccessor: this.state.xAccessor || xAccessor, displayXAccessor: this.state.displayXAccessor || displayXAccessor, onLoadMore: (start, end) => this.handleLoadMore(start, end), pointsPerPxThreshold: 2, minPointsPerPxThreshold: 1 / 50, xExtents: xExtents },
                 React.createElement(Chart, { id: 2, height: chartHeight * 0.3, width: width, yExtents: d => d.volume, origin: (w, h) => [0, h - chartHeight * 0.3] },
