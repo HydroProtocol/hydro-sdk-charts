@@ -523,11 +523,11 @@ export class OrderbookDeepChart extends BaseCanvas {
             // @ts-ignore
             return [new BigNumber(bid.price), new BigNumber(bid.amount)];
         });
-        sortData(this.bids, 'desc');
         this.asks = asks.map(ask => {
             // @ts-ignore
             return [new BigNumber(ask.price), new BigNumber(ask.amount)];
         });
+        sortData(this.bids, 'desc');
         sortData(this.asks, 'asc');
         this.price = this.getMiddlePrice();
         const range = this.getRange();
