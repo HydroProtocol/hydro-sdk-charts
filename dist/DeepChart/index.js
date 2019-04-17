@@ -3,7 +3,7 @@ import { OrderbookDeepChart } from './deepChartCanvas';
 import variables from '../variables/variables';
 class DeepChart extends PureComponent {
     getCommonOptions() {
-        const { baseToken, quoteToken } = this.props;
+        const { baseToken, quoteToken, bids, asks, clickCallback } = this.props;
         const priceDecimals = this.props.priceDecimals || 5;
         const amountDecimals = this.props.amountDecimals || 2;
         return {
@@ -11,6 +11,8 @@ class DeepChart extends PureComponent {
             showFPS: false,
             priceDecimals,
             amountDecimals,
+            bids,
+            asks,
             titleColor: variables.fontColor1,
             axisLabelColor: variables.fontColor2,
             axisColor: variables.borderGray,
@@ -23,7 +25,10 @@ class DeepChart extends PureComponent {
             green: variables.green,
             greenArea: variables.greenArea,
             onClick: result => {
-                console.log(result);
+                // console.log(result);
+                if (clickCallback) {
+                    clickCallback(result);
+                }
             },
             formatXAxisLabel: (price) => {
                 return `${price.toString()} ${this.props.quoteToken}`;

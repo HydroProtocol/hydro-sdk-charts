@@ -1,6 +1,6 @@
 import { BaseCanvas, BaseCanvasOptions } from '../lib/baseCanvas';
 import { roundRect } from '../lib/canvasUtils';
-import { asks, bids } from './constants';
+// import { asks, bids } from './constants';
 import { capitalizeFirstLetter } from '../lib/utils';
 import BigNumber from 'bignumber.js';
 
@@ -26,6 +26,8 @@ interface OrderbookDeepChartOptions extends BaseCanvasOptions {
   redArea?: any;
   titleColor?: any;
   containerBackgroundColor?: any;
+  bids: any;
+  asks: any;
 }
 
 export class OrderbookDeepChart extends BaseCanvas {
@@ -46,7 +48,9 @@ export class OrderbookDeepChart extends BaseCanvas {
     titleColor: '#fff',
     containerBackgroundColor: '#0a0909',
     paddingTop: 20,
-    xAxisHeight: 24
+    xAxisHeight: 24,
+    bids: [],
+    asks: []
   };
 
   protected options: OrderbookDeepChartOptions;
@@ -649,6 +653,8 @@ export class OrderbookDeepChart extends BaseCanvas {
         }
       });
     };
+
+    const { bids, asks } = this.options;
 
     this.bids = bids.map(bid => {
       return [new BigNumber(bid.price), new BigNumber(bid.amount)];

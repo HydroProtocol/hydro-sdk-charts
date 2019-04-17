@@ -19,6 +19,7 @@ import { last, hexToRGBA, createVerticalLinearGradient } from 'react-stockcharts
 import { ema } from 'react-stockcharts/lib/indicator';
 import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
 import { discontinuousTimeScaleProviderBuilder } from 'react-stockcharts/lib/scale';
+import { ClickCallback } from 'react-stockcharts/lib/interactive';
 
 import BigNumber from 'bignumber.js';
 import Select from '../Select';
@@ -35,7 +36,7 @@ interface Props {
   ratio: any;
   height: any;
   currentMarket: any;
-  fold: any;
+  clickCallback?: any;
 }
 
 class TradeChart extends Component<Props, any> {
@@ -317,7 +318,7 @@ class TradeChart extends Component<Props, any> {
   }
 
   public render() {
-    const { width, ratio, height, currentMarket } = this.props;
+    const { width, ratio, height, currentMarket, clickCallback } = this.props;
     const chartGreenColor = variables.green;
     const chartRedColor = variables.red;
     const textGrayColor = variables.fontColor2;
@@ -447,6 +448,19 @@ class TradeChart extends Component<Props, any> {
               height={chartHeight * 0.8}
               width={width}
               padding={{ left: 0, right: 0, top: 1, bottom: 1 }}>
+              <ClickCallback
+                onClick={(moreProps, e) => {
+                  const { mouseXY, chartConfig, currentItem } = moreProps;
+                  const result = {
+                    candleData: currentItem,
+                    clickedPrice: new BigNumber(chartConfig.yScale.invert(mouseXY[1]).toString())
+                  };
+                  // console.log(result);
+                  if (clickCallback) {
+                    clickCallback(result);
+                  }
+                }}
+              />
               <YAxis
                 axisAt="right"
                 orient="right"

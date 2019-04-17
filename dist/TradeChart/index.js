@@ -19,6 +19,8 @@ import { fitDimensions, fitWidth } from 'react-stockcharts/lib/helper';
 import { last } from 'react-stockcharts/lib/utils';
 import { ema } from 'react-stockcharts/lib/indicator';
 import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
+import { ClickCallback } from 'react-stockcharts/lib/interactive';
+import BigNumber from 'bignumber.js';
 import Select from '../Select';
 import { granularityOptions, chartOptions, overlayOptions, testData } from './constants';
 import variables from '../variables/variables';
@@ -281,7 +283,7 @@ class TradeChart extends Component {
         }
     }
     render() {
-        const { width, ratio, height, currentMarket } = this.props;
+        const { width, ratio, height, currentMarket, clickCallback } = this.props;
         const chartGreenColor = variables.green;
         const chartRedColor = variables.red;
         const textGrayColor = variables.fontColor2;
@@ -373,6 +375,17 @@ class TradeChart extends Component {
                     React.createElement(MouseCoordinateX, { at: "bottom", orient: "bottom", displayFormat: timeFormat('%Y-%m-%d') }),
                     React.createElement(BarSeries, { yAccessor: d => d.volume, fill: barColor, widthRatio: 0.4, opacity: 1 })),
                 React.createElement(Chart, { id: 1, yExtents: [d => [d.high, d.low], ema26.accessor(), ema12.accessor()], height: chartHeight * 0.8, width: width, padding: { left: 0, right: 0, top: 1, bottom: 1 } },
+                    React.createElement(ClickCallback, { onClick: (moreProps, e) => {
+                            const { mouseXY, chartConfig, currentItem } = moreProps;
+                            const result = {
+                                candleData: currentItem,
+                                clickedPrice: new BigNumber(chartConfig.yScale.invert(mouseXY[1]).toString())
+                            };
+                            // console.log(result);
+                            if (clickCallback) {
+                                clickCallback(result);
+                            }
+                        } }),
                     React.createElement(YAxis, { axisAt: "right", orient: "right", ticks: 5, tickStroke: textGrayColor, stroke: "none", tickFormat: format(`.${priceDecimals}f`) }),
                     this.state.chart === 'candle' ? (React.createElement(CandlestickSeries, { widthRatio: 0.5, opacity: 1, candleStrokeWidth: "1", stroke: d => (d.close > d.open ? chartGreenColor : chartRedColor), wickStroke: d => (d.close > d.open ? chartGreenColor : chartRedColor), fill: d => (d.close > d.open ? 'none' : chartRedColor) })) : (React.createElement(AreaSeries, { yAccessor: d => d.close, strokeWidth: 2, stroke: chartGreenColor, fill: "url(#LineGradient)", interpolation: curveMonotoneX })),
                     this.state.isShowEMA26 && React.createElement(LineSeries, { yAccessor: ema26.accessor(), stroke: ema26.stroke() }),

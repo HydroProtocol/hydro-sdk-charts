@@ -8,13 +8,16 @@ interface Props {
   amountDecimals?: any;
   baseToken: any;
   quoteToken: any;
+  bids: any;
+  asks: any;
+  clickCallback?: any;
 }
 
 class DeepChart extends PureComponent<Props, any> {
   private chart: any;
 
   public getCommonOptions() {
-    const { baseToken, quoteToken } = this.props;
+    const { baseToken, quoteToken, bids, asks, clickCallback } = this.props;
     const priceDecimals = this.props.priceDecimals || 5;
     const amountDecimals = this.props.amountDecimals || 2;
     return {
@@ -22,6 +25,8 @@ class DeepChart extends PureComponent<Props, any> {
       showFPS: false,
       priceDecimals,
       amountDecimals,
+      bids,
+      asks,
       titleColor: variables.fontColor1,
       axisLabelColor: variables.fontColor2,
       axisColor: variables.borderGray,
@@ -34,7 +39,10 @@ class DeepChart extends PureComponent<Props, any> {
       green: variables.green,
       greenArea: variables.greenArea,
       onClick: result => {
-        console.log(result);
+        // console.log(result);
+        if (clickCallback) {
+          clickCallback(result);
+        }
       },
       formatXAxisLabel: (price: string): string => {
         return `${price.toString()} ${this.props.quoteToken}`;
