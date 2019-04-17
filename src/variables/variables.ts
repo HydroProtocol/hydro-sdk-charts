@@ -8,7 +8,7 @@ export const themeDark = {
   backgroundContainer: '#161616',
   backgroundHover: '#292929',
   borderGray: 'rgba(255, 255, 255, 0.1)',
-  mainColor: '#fff',
+  mainColor: '#ffffff',
   secondColor: '#97999a',
   orderbookGreenHover: '#333',
   orderbookRedHover: '#333',

@@ -59,17 +59,17 @@ class TradeChart extends Component {
         this.loadData();
         this.interval = window.setInterval(() => this.loadRight(), 60000);
     }
-    componentDidUpdate(prevProps) {
-        // if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
-        //   this.setState({
-        //     from: null,
-        //     to: null,
-        //     data: [],
-        //     noData: false
-        //   });
-        //   this.loadData();
-        // }
-    }
+    // public componentDidUpdate(prevProps) {
+    //   if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
+    //     this.setState({
+    //       from: null,
+    //       to: null,
+    //       data: [],
+    //       noData: false
+    //     });
+    //     this.loadData();
+    //   }
+    // }
     componentWillUnmount() {
         if (this.interval) {
             window.clearInterval(this.interval);
@@ -368,7 +368,7 @@ class TradeChart extends Component {
         }
         const priceLen = Math.floor(maxHigh).toString().length + priceDecimals;
         const marginRight = priceLen > 5 ? priceLen * 9 : 50;
-        return (React.createElement("div", { style: { height: '100%', position: 'relative', background: variables.background }, className: "hydro-sdk-TradeChart flex-column" },
+        return (React.createElement("div", { style: { height: '100%', position: 'relative', background: variables.backgroundContainer }, className: "hydro-sdk-TradeChart flex-column" },
             this.renderSelections(),
             !(this.state.loading && this.state.data.length === 0) && (React.createElement(ChartCanvas, { height: chartHeight, ratio: ratio, width: width, margin: { left: 0, right: marginRight, top: 10, bottom: 30 }, type: 'svg', seriesName: "MSFT", data: data, xScale: this.state.xScale || xScale, xAccessor: this.state.xAccessor || xAccessor, displayXAccessor: this.state.displayXAccessor || displayXAccessor, onLoadMore: (start, end) => this.handleLoadMore(start, end), pointsPerPxThreshold: 2, minPointsPerPxThreshold: 1 / 50, xExtents: xExtents },
                 React.createElement(Chart, { id: 2, height: chartHeight * 0.3, width: width, yExtents: d => d.volume, origin: (w, h) => [0, h - chartHeight * 0.3] },

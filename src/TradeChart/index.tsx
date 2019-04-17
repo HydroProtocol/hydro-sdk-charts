@@ -79,17 +79,17 @@ class TradeChart extends Component<Props, any> {
     this.interval = window.setInterval(() => this.loadRight(), 60000);
   }
 
-  public componentDidUpdate(prevProps) {
-    // if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
-    //   this.setState({
-    //     from: null,
-    //     to: null,
-    //     data: [],
-    //     noData: false
-    //   });
-    //   this.loadData();
-    // }
-  }
+  // public componentDidUpdate(prevProps) {
+  //   if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
+  //     this.setState({
+  //       from: null,
+  //       to: null,
+  //       data: [],
+  //       noData: false
+  //     });
+  //     this.loadData();
+  //   }
+  // }
 
   public componentWillUnmount() {
     if (this.interval) {
@@ -412,7 +412,7 @@ class TradeChart extends Component<Props, any> {
     const marginRight = priceLen > 5 ? priceLen * 9 : 50;
     return (
       <div
-        style={{ height: '100%', position: 'relative', background: variables.background }}
+        style={{ height: '100%', position: 'relative', background: variables.backgroundContainer }}
         className="hydro-sdk-TradeChart flex-column">
         {this.renderSelections()}
         {!(this.state.loading && this.state.data.length === 0) && (
