@@ -193,7 +193,7 @@ class TradeChart extends Component<Props, any> {
       return;
     }
     // this.loadLeft(start, end);
-    handleLoadMore(start, end);
+    handleLoadMore({ start, end });
   }
 
   public fixData(data) {
@@ -561,7 +561,7 @@ class TradeChart extends Component<Props, any> {
               // this.loadData(option.value);
               const { clickGranularity } = this.props;
               if (clickGranularity) {
-                clickGranularity(option.value);
+                clickGranularity({ value: option.value });
               }
               window.localStorage.setItem('granularityStr', option.value);
             }}

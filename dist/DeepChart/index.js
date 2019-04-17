@@ -49,8 +49,6 @@ class DeepChart extends PureComponent {
         };
     }
     componentWillReceiveProps(nextProps) {
-        // console.log('componentWillReceiveProps');
-        // console.log(nextProps);
         setBids(nextProps.bids);
         setAsks(nextProps.asks);
     }

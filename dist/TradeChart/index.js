@@ -151,7 +151,7 @@ class TradeChart extends Component {
             return;
         }
         // this.loadLeft(start, end);
-        handleLoadMore(start, end);
+        handleLoadMore({ start, end });
     }
     fixData(data) {
         const fd = []; // fixedData
@@ -408,7 +408,7 @@ class TradeChart extends Component {
                         // this.loadData(option.value);
                         const { clickGranularity } = this.props;
                         if (clickGranularity) {
-                            clickGranularity(option.value);
+                            clickGranularity({ value: option.value });
                         }
                         window.localStorage.setItem('granularityStr', option.value);
                     } })),
