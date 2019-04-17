@@ -7,9 +7,7 @@ class DeepChart extends PureComponent {
         return theme === 'light' ? themeLight : themeDark;
     }
     getCommonOptions() {
-        const { baseToken, quoteToken, bids, asks, clickCallback, styles } = this.props;
-        const priceDecimals = this.props.priceDecimals || 5;
-        const amountDecimals = this.props.amountDecimals || 2;
+        const { baseToken, quoteToken, priceDecimals, amountDecimals, bids, asks, clickCallback, styles } = this.props;
         const variables = this.getVariables();
         return {
             height: -1,
@@ -25,10 +23,10 @@ class DeepChart extends PureComponent {
             axisColor: (styles && styles.axisColor) || variables.borderGray,
             rowBackgroundColor: (styles && styles.rowBackgroundColor) || variables.backgroundContainer,
             containerBackgroundColor: (styles && styles.containerBackgroundColor) || variables.background,
-            red: (styles && styles.red) || variables.red,
-            redArea: (styles && styles.redArea) || variables.redArea,
-            green: (styles && styles.green) || variables.green,
-            greenArea: (styles && styles.greenArea) || variables.greenArea,
+            red: (styles && styles.askColor) || variables.red,
+            redArea: (styles && styles.askColorArea) || variables.redArea,
+            green: (styles && styles.bidColor) || variables.green,
+            greenArea: (styles && styles.bidColorArea) || variables.greenArea,
             onClick: result => {
                 // console.log(result);
                 if (clickCallback) {

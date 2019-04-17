@@ -38,7 +38,7 @@ export class OrderbookDeepChart extends BaseCanvas {
     showFPS: false,
     axisColor: 'red',
     axisLabelColor: 'white',
-    priceDecimals: 8,
+    priceDecimals: 5,
     amountDecimals: 2,
     rowBackgroundColor: 'black',
     green: '#00b488',
