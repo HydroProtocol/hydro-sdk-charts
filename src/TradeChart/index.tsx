@@ -69,14 +69,6 @@ class TradeChart extends Component<Props, any> {
       granularityStr,
       isShowEMA12,
       isShowEMA26
-      // loading: false,
-      // noData: false,
-      // data: [],
-      // from: null,
-      // to: null,
-      // start: null,
-      // end: null,
-      // lastUpdatedAt: new Date().getTime() // for loadRight
     };
   }
 
@@ -85,111 +77,11 @@ class TradeChart extends Component<Props, any> {
     return theme === 'light' ? themeLight : themeDark;
   }
 
-  // public componentDidMount() {
-  //   this.loadData();
-  //   this.interval = window.setInterval(() => this.loadRight(), 60000);
-  // }
-
-  // public componentDidUpdate(prevProps) {
-  //   if (prevProps.currentMarket.id !== this.props.currentMarket.id) {
-  //     this.setState({
-  //       from: null,
-  //       to: null,
-  //       data: [],
-  //       noData: false
-  //     });
-  //     this.loadData();
-  //   }
-  // }
-
   public componentWillUnmount() {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
   }
-
-  // public async loadRight(granularityStr: string | null = null) {
-  //   if (new Date().getTime() - this.state.lastUpdatedAt > 59000) {
-  //     this.loadData(this.state.granularityStr, this.state.to);
-  //   }
-  // }
-
-  // public async loadLeft(start: number, end: number) {
-  //   this.loadData(this.state.granularityStr, null, this.state.from, start, end);
-  // }
-
-  // public async loadData(
-  //   granularityStr: string | null = null,
-  //   from: number | null = null,
-  //   to: number | null = null,
-  //   start: number | null = null,
-  //   end: number | null = null
-  // ) {
-  //   this.setState({ data: this.fixData(testData) });
-  //   return;
-  // }
-
-  //   const granularityIsSame: boolean = this.state.granularityStr === granularityStr;
-  //   if (this.state.loading || (granularityIsSame && this.state.noData)) {
-  //     return;
-  //   }
-  //   if (!granularityIsSame && this.state.noData) {
-  //     this.setState({ noData: false });
-  //   }
-  //   this.setState({ loading: true });
-
-  //   const params = this.generateParams(granularityStr || this.state.granularityStr, from, to);
-  //   if (granularityStr) {
-  //     this.setState({ granularityStr });
-  //   }
-
-  //   let res: any;
-  //   try {
-  //     res = await api.get(
-  //       `/markets/${this.props.currentMarket.id}/tradingView?from=${params.from}&to=${params.to}&granularity=${
-  //         params.granularityNum
-  //       }`
-  //     );
-  //     if (res.data.data.meta && res.data.data.meta.noData) {
-  //       this.setState({ loading: false, noData: true });
-  //       return;
-  //     }
-  //   } catch (e) {
-  //     this.setState({ loading: false });
-  //     return;
-  //   }
-
-  //   const newData = this.fixData(res.data.data.candles);
-  //   const changeState = {
-  //     data: newData,
-  //     from: params.from,
-  //     to: params.to,
-  //     start: null,
-  //     end: null,
-  //     lastUpdatedAt: new Date().getTime()
-  //   };
-
-  //   if (granularityIsSame) {
-  //     if (this.state.from && this.state.from > params.from) {
-  //       // loadLeft
-  //       changeState.to = this.state.to;
-  //       changeState.data = [...newData, ...this.state.data];
-  //       changeState.start = start + newData.length;
-  //       changeState.end =
-  //         end + newData.length > start + newData.length + this.fitLengthToShow()
-  //           ? end + newData.length
-  //           : start + newData.length + this.fitLengthToShow();
-  //     }
-  //     if (this.state.to && this.state.to < params.to) {
-  //       // loadRight
-  //       changeState.from = this.state.from;
-  //       changeState.data = this.fixData([...this.state.data, ...newData]);
-  //     }
-  //   }
-
-  //   this.setState(changeState);
-  //   this.setState({ loading: false });
-  // }
 
   public handleLoadMore(start, end) {
     const { handleLoadMore } = this.props;
