@@ -414,7 +414,7 @@ class TradeChart extends Component {
     renderSelections() {
         return (React.createElement("div", { className: "chartSelection" },
             React.createElement("div", { className: "selection1" },
-                React.createElement(Select, { size: 'small', options: granularityOptions, selected: this.state.granularityStr, onSelect: option => {
+                React.createElement(Select, { size: 'small', theme: this.props.theme, options: granularityOptions, selected: this.state.granularityStr, onSelect: option => {
                         // this.loadData(option.value);
                         const { clickGranularity } = this.props;
                         if (clickGranularity) {
@@ -423,12 +423,12 @@ class TradeChart extends Component {
                         window.localStorage.setItem('granularityStr', option.value);
                     } })),
             React.createElement("div", { className: "selection2" },
-                React.createElement(Select, { size: 'small', options: chartOptions, selected: this.state.chart, onSelect: option => {
+                React.createElement(Select, { size: 'small', theme: this.props.theme, options: chartOptions, selected: this.state.chart, onSelect: option => {
                         this.setState({ chart: option.value });
                         window.localStorage.setItem('chart', option.value);
                     } })),
             React.createElement("div", { className: "selection3" },
-                React.createElement(Select, { size: 'small', options: overlayOptions, selected: 'overlay', onSelect: option => this.selectEMA(option.value) }))));
+                React.createElement(Select, { size: 'small', theme: this.props.theme, options: overlayOptions, selected: 'overlay', onSelect: option => this.selectEMA(option.value) }))));
     }
 }
 export default fitWidth(fitDimensions(TradeChart));

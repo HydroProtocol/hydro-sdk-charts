@@ -579,6 +579,7 @@ class TradeChart extends Component<Props, any> {
         <div className="selection1">
           <Select
             size={'small'}
+            theme={this.props.theme}
             options={granularityOptions}
             selected={this.state.granularityStr}
             onSelect={option => {
@@ -594,6 +595,7 @@ class TradeChart extends Component<Props, any> {
         <div className="selection2">
           <Select
             size={'small'}
+            theme={this.props.theme}
             options={chartOptions}
             selected={this.state.chart}
             onSelect={option => {
@@ -605,6 +607,7 @@ class TradeChart extends Component<Props, any> {
         <div className="selection3">
           <Select
             size={'small'}
+            theme={this.props.theme}
             options={overlayOptions}
             selected={'overlay'}
             onSelect={option => this.selectEMA(option.value)}

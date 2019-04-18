@@ -1,5 +1,3 @@
-@import '../variables/variables.scss';
-
 .chartSelection {
     display: flex;
     justify-content: flex-start;
@@ -48,6 +46,6 @@
 }
 // line stroke is using fill, but our fill with green border is none.
 // https://github.com/rrag/react-stockcharts/blob/6cc29406ee305a6011a8f9437d3f47deb549629d/src/lib/series/CandlestickSeries.js#L127
-line[stroke='none'] {
-    stroke: #00c6a3;
-}
+// line[stroke='none'] {
+//     stroke: #00c6a3;
+// }

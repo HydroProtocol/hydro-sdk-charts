@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import './style.css';
+import './light.css';
+import './dark.css';
 export default class Select extends PureComponent {
     constructor(props) {
         super(props);
@@ -100,6 +101,13 @@ export default class Select extends PureComponent {
         const classNames = ['select'];
         if (unfolded) {
             classNames.push('unfolded');
+        }
+        const { theme } = this.props;
+        if (theme === 'light') {
+            classNames.push('light');
+        }
+        else {
+            classNames.push('dark');
         }
         return (React.createElement("div", { className: classNames.join(' '), id: this.id, ref: this.setContainer },
             this.renderSelected(),

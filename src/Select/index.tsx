@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import './style.css';
+import './light.css';
+import './dark.css';
 
 export interface Option {
   value: any;
@@ -18,6 +19,7 @@ interface Props {
   blank?: any;
   formatSelect?: any;
   size?: any;
+  theme?: any;
 }
 
 interface State {
@@ -157,11 +159,17 @@ export default class Select extends PureComponent<Props, State> {
 
   public render() {
     const { unfolded } = this.state;
-
     const classNames = ['select'];
 
     if (unfolded) {
       classNames.push('unfolded');
+    }
+
+    const { theme } = this.props;
+    if (theme === 'light') {
+      classNames.push('light');
+    } else {
+      classNames.push('dark');
     }
 
     return (

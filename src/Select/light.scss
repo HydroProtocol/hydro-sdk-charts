@@ -1,6 +1,6 @@
-@import '../variables/variables.scss';
+@import '../variables/light.scss';
 
-.select {
+.select.light {
     position: relative;
     flex: 1;
     color: $mainColor;

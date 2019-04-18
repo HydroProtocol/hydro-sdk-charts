@@ -1,0 +1,122 @@
+@import '../variables/dark.scss';
+
+.select.dark {
+    position: relative;
+    flex: 1;
+    color: $mainColor;
+
+    &.unfolded {
+        .dropdown {
+            height: auto;
+        }
+    }
+
+    .selected {
+        border: 1px solid $borderGray;
+        border-radius: $radius;
+        padding: 0 $padding;
+        height: 32px;
+        line-height: 32px;
+        background: $backgroundField;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &.small {
+            height: 22px;
+            line-height: 22px;
+            padding: 0 ($padding * 2 / 3);
+        }
+    }
+
+    .dropdown {
+        position: absolute;
+        border-radius: $radius;
+        height: 0;
+        z-index: 99999999999999999;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: $backgroundField;
+
+        &.up {
+            bottom: 110%;
+        }
+
+        &.down {
+            top: 110%;
+        }
+    }
+
+    .item {
+        padding: 0 $padding;
+        height: 32px;
+        line-height: 32px;
+        border: 1px solid $borderGray;
+        border-bottom-width: 0;
+        border-top-width: 0;
+        cursor: pointer;
+        background: $backgroundField;
+
+        &:hover {
+            background: $borderGray;
+        }
+
+        &:first-child {
+            border-top-width: 1px;
+            border-top-left-radius: $radius;
+            border-top-right-radius: $radius;
+        }
+
+        &:last-child {
+            border-bottom-width: 1px;
+            border-bottom-left-radius: $radius;
+            border-bottom-right-radius: $radius;
+        }
+
+        &.small {
+            height: 22px;
+            line-height: 22px;
+            padding: 0 ($padding * 2 / 3);
+        }
+
+        &.disabled {
+            color: $secondColor;
+            cursor: not-allowed;
+        }
+    }
+
+    .caret {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: $padding * 2 + $fontSizeNormal;
+        border-left: 1px solid $borderGray;
+        border-top-right-radius: $radius;
+        border-bottom-right-radius: $radius;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        margin-top: 1px;
+
+        &:before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid $secondColor;
+            border-radius: $radius;
+        }
+
+        &.small {
+            height: 22px;
+            width: $padding + $fontSizeNormal;
+        }
+    }
+}
