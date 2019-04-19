@@ -9,7 +9,7 @@ The hydro-sdk-charts including trade chart and deep chart.
 The package can be installed via NPM:
 
 ```
-npm install react-calendar-card --save
+npm install hydro-sdk-charts --save
 ```
 
 ## Usage
