@@ -14,6 +14,8 @@ npm install react-calendar-card --save
 
 ### TradeChart Example
 
+Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/TradeChartTestData.js)
+
 ```
 <TradeChart
   theme="light"
@@ -27,8 +29,6 @@ npm install react-calendar-card --save
   }}
 />
 ```
-
-Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/TradeChartTestData.js)
 
 TradeChart Props
 
@@ -57,6 +57,8 @@ interface Props {
 
 ### TradeChart Example
 
+Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/DeepChartTestData.js)
+
 ```
 <DeepChart
   asks={bids}
@@ -69,8 +71,6 @@ interface Props {
   }}
 />
 ```
-
-Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/DeepChartTestData.js)
 
 DeepChart Props:
 
