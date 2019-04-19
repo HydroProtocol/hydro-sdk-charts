@@ -12,7 +12,7 @@ npm install react-calendar-card --save
 
 ## Usage
 
-TradeChart Example, data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/TradeChart.js)
+TradeChart Example, data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/TradeChartTestData.js)
 
 ```
 <TradeChart
@@ -53,7 +53,7 @@ interface Props {
 }
 ```
 
-TradeChart Example, data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/DeepChart.js)
+TradeChart Example, data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/DeepChartTestData.js)
 
 ```
 <DeepChart
