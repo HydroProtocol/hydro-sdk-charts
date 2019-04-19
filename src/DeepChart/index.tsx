@@ -17,13 +17,13 @@ interface Styles {
 }
 
 interface Props {
+  bids: any;
+  asks: any;
   theme?: any;
   priceDecimals?: any;
   amountDecimals?: any;
   baseToken: any;
   quoteToken: any;
-  bids: any;
-  asks: any;
   clickCallback?: any;
   styles?: Styles;
 }
