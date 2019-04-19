@@ -1,5 +1,7 @@
 # hydro-sdk-charts
 
+**WIP:** this project is under very active development, and it is not ready for production usage. This warnning will be removed when it is reliable.
+
 The hydro-sdk-charts including trade chart and deep chart.
 
 ## Installation
