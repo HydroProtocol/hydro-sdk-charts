@@ -19,13 +19,13 @@ interface Styles {
 interface Props {
   bids: any;
   asks: any;
-  theme?: any;
-  priceDecimals?: any;
-  amountDecimals?: any;
   baseToken: any;
   quoteToken: any;
-  clickCallback?: any;
+  theme?: any;
   styles?: Styles;
+  priceDecimals?: any;
+  amountDecimals?: any;
+  clickCallback?: any;
 }
 
 class DeepChart extends PureComponent<Props, any> {

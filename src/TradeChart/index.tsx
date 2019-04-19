@@ -40,15 +40,16 @@ interface Styles {
 
 interface Props {
   data: any;
+  currentMarket: any;
+  theme?: any;
+  styles?: Styles;
+  clickCallback?: any;
+  handleLoadMore?: any;
+  clickGranularity?: any;
+  // do'nt need pass manually
   width: any;
   ratio: any;
   height: any;
-  currentMarket: any;
-  clickCallback?: any;
-  theme?: any;
-  handleLoadMore?: any;
-  clickGranularity?: any;
-  styles?: Styles;
 }
 
 class TradeChart extends Component<Props, any> {
