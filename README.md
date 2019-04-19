@@ -55,7 +55,7 @@ interface Props {
 }
 ```
 
-### TradeChart Example
+### DeepChart Example
 
 Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/DeepChartTestData.js)
 
