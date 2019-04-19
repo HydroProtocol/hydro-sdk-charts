@@ -2,6 +2,10 @@
   "name": "hydro-sdk-charts",
   "version": "0.1.0",
   "description": "hydro sdk charts",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/HydroProtocol/hydro-sdk-charts.git"
+  },
   "main": "./dist/index.js",
   "scripts": {
     "prepare": "npm run clean && npm run build",
@@ -10,8 +14,8 @@
     "build-js": "tsc -p .",
     "build-css": "node-sass src/ --output dist"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "HydroProtocol",
+  "license": "Apache-2.0",
   "dependencies": {
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
