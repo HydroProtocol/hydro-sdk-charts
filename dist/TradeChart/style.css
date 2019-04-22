@@ -1,3 +1,6 @@
+.hydro-sdk-TradeChart {
+  z-index: 0; }
+
 .chartSelection {
   display: flex;
   justify-content: flex-start;
