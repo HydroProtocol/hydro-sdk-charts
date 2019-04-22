@@ -24,7 +24,7 @@ Data format example [TradeChart test data](https://github.com/HydroProtocol/hydr
 <TradeChart
   theme="dark" // or light
   data={testData}
-  styles={{ upColor: 'blue' }}
+  styles={{ upColor: '#00d99f' }}
   clickCallback={result => {
     console.log('result: ', result);
   }}
@@ -69,6 +69,7 @@ Data format example [TradeChart test data](https://github.com/HydroProtocol/hydr
   bids={asks}
   baseToken="HOT"
   quoteToken="DAI"
+  styles={{ bidColor: '#00d99f' }}
   clickCallback={result => {
     console.log('result: ', result);
   }}
