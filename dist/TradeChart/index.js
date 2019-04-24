@@ -320,6 +320,7 @@ class TradeChart extends Component {
                 React.createElement(Select, { size: 'small', theme: this.props.theme, options: granularityOptions, selected: this.state.granularityStr, onSelect: option => {
                         // this.loadData(option.value);
                         const { clickGranularity } = this.props;
+                        this.setState({ granularityStr: option.value });
                         if (clickGranularity) {
                             clickGranularity({ value: option.value });
                         }

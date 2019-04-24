@@ -478,6 +478,7 @@ class TradeChart extends Component<Props, any> {
             onSelect={option => {
               // this.loadData(option.value);
               const { clickGranularity } = this.props;
+              this.setState({ granularityStr: option.value });
               if (clickGranularity) {
                 clickGranularity({ value: option.value });
               }
