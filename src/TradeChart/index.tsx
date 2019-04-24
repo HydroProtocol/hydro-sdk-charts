@@ -46,6 +46,8 @@ interface Props {
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
+  start?: any;
+  end?: any;
   // do'nt need pass manually
   width: any;
   ratio: any;
@@ -289,8 +291,8 @@ class TradeChart extends Component<Props, any> {
     const fitLen = this.fitLengthToShow();
     let xExtents = [dataLen - 1, dataLen - 1 - fitLen + 1];
     if (fitLen < dataLen) {
-      const start = this.state.start || xAccessor(last(data));
-      const end = this.state.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
+      const start = this.props.start || xAccessor(last(data));
+      const end = this.props.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
       xExtents = [start, end];
     }
 

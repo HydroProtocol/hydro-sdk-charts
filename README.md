@@ -53,6 +53,8 @@ interface Props {
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
+  start?: any;
+  end?: any;
 }
 ```
 

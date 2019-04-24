@@ -238,8 +238,8 @@ class TradeChart extends Component {
         const fitLen = this.fitLengthToShow();
         let xExtents = [dataLen - 1, dataLen - 1 - fitLen + 1];
         if (fitLen < dataLen) {
-            const start = this.state.start || xAccessor(last(data));
-            const end = this.state.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
+            const start = this.props.start || xAccessor(last(data));
+            const end = this.props.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
             xExtents = [start, end];
         }
         // selection height is 48
