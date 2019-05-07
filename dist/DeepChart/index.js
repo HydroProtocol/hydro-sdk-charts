@@ -1,11 +1,20 @@
-import React, { PureComponent } from 'react';
-import { OrderbookDeepChart } from './deepChartCanvas';
-import { themeDark, themeLight } from '../variables/variables';
-import { setBids, setAsks } from './memoryOrderbook';
-class DeepChart extends PureComponent {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = __importStar(require("react"));
+const deepChartCanvas_1 = require("./deepChartCanvas");
+const variables_1 = require("../variables/variables");
+const memoryOrderbook_1 = require("./memoryOrderbook");
+class DeepChart extends react_1.PureComponent {
     getVariables() {
         const { theme } = this.props;
-        return theme === 'light' ? themeLight : themeDark;
+        return theme === 'light' ? variables_1.themeLight : variables_1.themeDark;
     }
     getCommonOptions() {
         const { baseToken, quoteToken, priceDecimals, amountDecimals, clickCallback, styles } = this.props;
@@ -49,15 +58,15 @@ class DeepChart extends PureComponent {
         };
     }
     componentWillReceiveProps(nextProps) {
-        setBids(nextProps.bids);
-        setAsks(nextProps.asks);
+        memoryOrderbook_1.setBids(nextProps.bids);
+        memoryOrderbook_1.setAsks(nextProps.asks);
     }
     componentDidMount() {
         const { bids, asks } = this.props;
-        setBids(bids);
-        setAsks(asks);
+        memoryOrderbook_1.setBids(bids);
+        memoryOrderbook_1.setAsks(asks);
         const commonOptions = this.getCommonOptions();
-        this.chart = new OrderbookDeepChart('deep-chart', commonOptions);
+        this.chart = new deepChartCanvas_1.OrderbookDeepChart('deep-chart', commonOptions);
         this.chart.start();
     }
     componentDidUpdate() {
@@ -72,8 +81,8 @@ class DeepChart extends PureComponent {
         }
     }
     render() {
-        return React.createElement("canvas", { id: "deep-chart", style: { width: '100%', height: '100%' } });
+        return react_1.default.createElement("canvas", { id: "deep-chart", style: { width: '100%', height: '100%' } });
     }
 }
-export default DeepChart;
+exports.default = DeepChart;
 //# sourceMappingURL=index.js.map

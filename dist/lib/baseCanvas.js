@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const getRatio = () => {
     let ratio;
     ratio = (function () {
@@ -14,7 +16,7 @@ const getRatio = () => {
     ratio = Math.max(ratio, 2);
     return ratio;
 };
-export class BaseCanvas {
+class BaseCanvas {
     constructor(id, options) {
         this.ratio = 1;
         this.timer = 0;
@@ -127,4 +129,5 @@ export class BaseCanvas {
         };
     }
 }
+exports.BaseCanvas = BaseCanvas;
 //# sourceMappingURL=baseCanvas.js.map
