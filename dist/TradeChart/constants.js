@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.granularityOptions = [
+export const granularityOptions = [
     // {
     //   value: '1m',
     //   text: '1m'
@@ -34,7 +32,7 @@ exports.granularityOptions = [
     //   text: '1mon'
     // },
 ];
-exports.chartOptions = [
+export const chartOptions = [
     {
         value: 'candle',
         text: 'Candle'
@@ -44,7 +42,7 @@ exports.chartOptions = [
         text: 'Line'
     }
 ];
-exports.overlayOptions = [
+export const overlayOptions = [
     {
         hidden: true,
         value: 'overlay',

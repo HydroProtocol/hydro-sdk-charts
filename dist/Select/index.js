@@ -1,16 +1,7 @@
-"use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = __importStar(require("react"));
-require("./light.css");
-require("./dark.css");
-class Select extends react_1.PureComponent {
+import React, { PureComponent } from 'react';
+import './light.css';
+import './dark.css';
+export default class Select extends PureComponent {
     constructor(props) {
         super(props);
         this.tryFoldListener = e => {
@@ -67,7 +58,7 @@ class Select extends react_1.PureComponent {
             if (option.hidden) {
                 continue;
             }
-            items.push(react_1.default.createElement("div", { key: option.value, className: `item ${size === 'small' ? 'small' : ''} ${option.disabled ? 'disabled' : ''}`, onClick: e => {
+            items.push(React.createElement("div", { key: option.value, className: `item ${size === 'small' ? 'small' : ''} ${option.disabled ? 'disabled' : ''}`, onClick: e => {
                     if (option.disabled) {
                         return;
                     }
@@ -88,7 +79,7 @@ class Select extends react_1.PureComponent {
         else if (direction === 'up') {
             dropdownClassNames.push('up');
         }
-        return react_1.default.createElement("div", { className: dropdownClassNames.join(' ') }, items);
+        return React.createElement("div", { className: dropdownClassNames.join(' ') }, items);
     }
     renderSelected() {
         let selectOption;
@@ -98,12 +89,12 @@ class Select extends react_1.PureComponent {
                 selectOption = option;
             }
         }
-        return (react_1.default.createElement("div", { className: `selected ${size === 'small' ? 'small' : ''}`, onClick: this.switchFold },
+        return (React.createElement("div", { className: `selected ${size === 'small' ? 'small' : ''}`, onClick: this.switchFold },
             selectOption ? (formatSelect ? formatSelect(selectOption) : this.renderOption(selectOption)) : blank,
             noCaret ? null : this.renderCaret()));
     }
     renderCaret() {
-        return react_1.default.createElement("div", { className: `caret ${this.props.size === 'small' ? 'small' : ''}` });
+        return React.createElement("div", { className: `caret ${this.props.size === 'small' ? 'small' : ''}` });
     }
     render() {
         const { unfolded } = this.state;
@@ -118,10 +109,9 @@ class Select extends react_1.PureComponent {
         else {
             classNames.push('dark');
         }
-        return (react_1.default.createElement("div", { className: classNames.join(' '), id: this.id, ref: this.setContainer },
+        return (React.createElement("div", { className: classNames.join(' '), id: this.id, ref: this.setContainer },
             this.renderSelected(),
             this.renderDropdown()));
     }
 }
-exports.default = Select;
 //# sourceMappingURL=index.js.map

@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.themeDark = {
+export const themeDark = {
     red: '#ee494c',
     redArea: 'rgba(227, 94, 65, 0.3)',
     green: '#41a275',
@@ -17,7 +15,7 @@ exports.themeDark = {
     orderbookGreenRGB: [17, 17, 17],
     orderbookRedRGB: [17, 17, 17]
 };
-exports.themeLight = {
+export const themeLight = {
     red: '#b83741',
     redArea: 'rgba(198, 39, 52, 0.1)',
     green: '#3da1a5',

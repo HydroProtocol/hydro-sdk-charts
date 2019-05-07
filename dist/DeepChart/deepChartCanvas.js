@@ -1,13 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const baseCanvas_1 = require("../lib/baseCanvas");
-const canvasUtils_1 = require("../lib/canvasUtils");
-const memoryOrderbook_1 = require("./memoryOrderbook");
-const utils_1 = require("../lib/utils");
-const bignumber_js_1 = __importDefault(require("bignumber.js"));
+import { BaseCanvas } from '../lib/baseCanvas';
+import { roundRect } from '../lib/canvasUtils';
+import { asks, bids } from './memoryOrderbook';
+import { capitalizeFirstLetter } from '../lib/utils';
+import BigNumber from 'bignumber.js';
 const sortData = (unsortedData, dataOrder = 'asc') => {
     unsortedData.sort((a, b) => {
         if (a[0].eq(b[0])) {
@@ -23,12 +18,12 @@ const sortData = (unsortedData, dataOrder = 'asc') => {
         }
     });
 };
-class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
+export class OrderbookDeepChart extends BaseCanvas {
     constructor(id, options) {
         super(id, options);
-        this.zoom = new bignumber_js_1.default(0.7);
-        this.price = new bignumber_js_1.default('0');
-        this.maxAmount = new bignumber_js_1.default('0');
+        this.zoom = new BigNumber(0.7);
+        this.price = new BigNumber('0');
+        this.maxAmount = new BigNumber('0');
         this.bids = [];
         this.asks = [];
         this.getXAxisLabelsCount = () => {
@@ -44,12 +39,12 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
             const data = bidCount > askCount ? this.bids : this.asks;
             const index = Math.ceil(this.zoom
                 .mul(bidCount > askCount ? bidCount : askCount)
-                .round(0, bignumber_js_1.default.ROUND_UP)
+                .round(0, BigNumber.ROUND_UP)
                 .toNumber()) - 1;
             if (!data[index]) {
-                return { left: new bignumber_js_1.default(0), right: new bignumber_js_1.default(0) };
+                return { left: new BigNumber(0), right: new BigNumber(0) };
             }
-            const diff = bignumber_js_1.default.min(data[index][0].minus(this.price).abs(), this.price);
+            const diff = BigNumber.min(data[index][0].minus(this.price).abs(), this.price);
             return {
                 left: this.price.minus(diff),
                 right: this.price.add(diff)
@@ -73,11 +68,11 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
                 isValid: false,
                 side: '',
                 y: 0,
-                totalAmount: new bignumber_js_1.default(0),
-                totalCost: new bignumber_js_1.default(0)
+                totalAmount: new BigNumber(0),
+                totalCost: new BigNumber(0)
             };
-            let totalAmount = new bignumber_js_1.default(0);
-            let totalCost = new bignumber_js_1.default(0);
+            let totalAmount = new BigNumber(0);
+            let totalCost = new BigNumber(0);
             if (this.bids[0] && price.lte(this.bids[0][0])) {
                 res.isValid = true;
                 res.side = 'buy';
@@ -209,7 +204,7 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
                 .div(labelCount)
                 .times(i)
                 .add(range.left)
-                .round(this.options.priceDecimals, bignumber_js_1.default.ROUND_HALF_EVEN)
+                .round(this.options.priceDecimals, BigNumber.ROUND_HALF_EVEN)
                 .toFixed(this.options.priceDecimals);
             const labelText = this.options.formatXAxisLabel
                 ? this.options.formatXAxisLabel(labelPrice)
@@ -221,12 +216,12 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         const range = this.getRange();
         this.ctx.lineWidth = 1 * this.ratio;
         this.ctx.strokeStyle = 'red';
-        let totalAmount = new bignumber_js_1.default(0);
+        let totalAmount = new BigNumber(0);
         this.ctx.beginPath();
         let _x, _y;
         for (let i = 0; i < data.length; i++) {
-            const price = new bignumber_js_1.default(data[i][0]);
-            const amount = new bignumber_js_1.default(data[i][1]);
+            const price = new BigNumber(data[i][0]);
+            const amount = new BigNumber(data[i][1]);
             totalAmount = totalAmount.add(amount);
             _x = this.getXByPrice(price, range.left, range.right);
             if (i === 0) {
@@ -312,8 +307,8 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         this.ctx.font = `${18 * this.ratio}px Roboto`;
         this.ctx.strokeStyle = this.options.axisColor;
         this.ctx.fillStyle = this.options.containerBackgroundColor;
-        canvasUtils_1.roundRect(this.ctx, zoomMetrics.zoomOut.x, zoomMetrics.zoomOut.y, zoomMetrics.zoomOut.width, zoomMetrics.zoomOut.height, 2 * this.ratio, true, true);
-        canvasUtils_1.roundRect(this.ctx, zoomMetrics.zoomIn.x, zoomMetrics.zoomIn.y, zoomMetrics.zoomIn.width, zoomMetrics.zoomIn.height, 2 * this.ratio, true, true);
+        roundRect(this.ctx, zoomMetrics.zoomOut.x, zoomMetrics.zoomOut.y, zoomMetrics.zoomOut.width, zoomMetrics.zoomOut.height, 2 * this.ratio, true, true);
+        roundRect(this.ctx, zoomMetrics.zoomIn.x, zoomMetrics.zoomIn.y, zoomMetrics.zoomIn.width, zoomMetrics.zoomIn.height, 2 * this.ratio, true, true);
         this.ctx.fillStyle = zoomMetrics.zoomOut.mouseIn ? this.options.titleColor : this.options.axisLabelColor;
         this.ctx.fillText('-', zoomMetrics.zoomOut.x + zoomMetrics.zoomOut.width / 2, zoomMetrics.zoomOut.y + zoomMetrics.zoomOut.height / 2 + 1 * this.ratio);
         if (zoomMetrics.zoomIn.mouseIn || zoomMetrics.zoomOut.mouseIn) {
@@ -354,7 +349,7 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         const height = padding * this.ratio * 2 + (priceTextSize + helperTextSize + textGapSize) * this.ratio;
         this.ctx.fillStyle = this.options.containerBackgroundColor;
         this.ctx.strokeStyle = this.options.axisColor;
-        canvasUtils_1.roundRect(this.ctx, x, y, width, height, 2 * this.ratio, true, true);
+        roundRect(this.ctx, x, y, width, height, 2 * this.ratio, true, true);
         // draw price
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = this.options.titleColor;
@@ -373,7 +368,7 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         this.ctx.stroke();
     }
     getDeepAreaHeight() {
-        return new bignumber_js_1.default((this.canvas.height - this.options.xAxisHeight * this.ratio).toString());
+        return new BigNumber((this.canvas.height - this.options.xAxisHeight * this.ratio).toString());
     }
     getYByAmount(amount) {
         const deepAreaHeight = this.getDeepAreaHeight().minus((this.options.paddingTop * this.ratio).toString());
@@ -475,7 +470,7 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         this.ctx.textAlign = 'left';
         this.ctx.fillText('Price', tooltipX + tooltipPadding * this.ratio, tooltipY + tooltipPadding * this.ratio);
         this.ctx.fillStyle = side === 'buy' ? this.options.red : this.options.green;
-        this.ctx.fillText(utils_1.capitalizeFirstLetter(side), tooltipX + tooltipPadding * this.ratio, tooltipY + (fontSize + tooltipPadding + lineGap) * this.ratio);
+        this.ctx.fillText(capitalizeFirstLetter(side), tooltipX + tooltipPadding * this.ratio, tooltipY + (fontSize + tooltipPadding + lineGap) * this.ratio);
         this.ctx.fillText('Cost', tooltipX + tooltipPadding * this.ratio, tooltipY + (tooltipPadding + (lineGap + fontSize) * 2) * this.ratio);
         this.ctx.fillStyle = this.options.titleColor;
         this.ctx.textAlign = 'right';
@@ -513,7 +508,7 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
     }
     getMiddlePrice() {
         if (!this.bids[0] && !this.asks[0]) {
-            return new bignumber_js_1.default(0);
+            return new BigNumber(0);
         }
         if (!this.asks[0]) {
             return this.bids[0][0];
@@ -524,33 +519,33 @@ class OrderbookDeepChart extends baseCanvas_1.BaseCanvas {
         return this.bids[0][0].add(this.asks[0][0]).div(2);
     }
     prepareData() {
-        this.bids = memoryOrderbook_1.bids.map(bid => {
+        this.bids = bids.map(bid => {
             // @ts-ignore
-            return [new bignumber_js_1.default(bid.price), new bignumber_js_1.default(bid.amount)];
+            return [new BigNumber(bid.price), new BigNumber(bid.amount)];
         });
-        this.asks = memoryOrderbook_1.asks.map(ask => {
+        this.asks = asks.map(ask => {
             // @ts-ignore
-            return [new bignumber_js_1.default(ask.price), new bignumber_js_1.default(ask.amount)];
+            return [new BigNumber(ask.price), new BigNumber(ask.amount)];
         });
         sortData(this.bids, 'desc');
         sortData(this.asks, 'asc');
         this.price = this.getMiddlePrice();
         const range = this.getRange();
-        let bidAmount = new bignumber_js_1.default(0);
+        let bidAmount = new BigNumber(0);
         for (let i = 0; i < this.bids.length; i++) {
             if (this.bids[i][0].lt(range.left)) {
                 break;
             }
             bidAmount = bidAmount.add(this.bids[i][1]);
         }
-        let askAmount = new bignumber_js_1.default(0);
+        let askAmount = new BigNumber(0);
         for (let i = 0; i < this.asks.length; i++) {
             if (this.asks[i][0].gt(range.right)) {
                 break;
             }
             askAmount = askAmount.add(this.asks[i][1]);
         }
-        this.maxAmount = bignumber_js_1.default.max(askAmount, bidAmount).mul(1.5);
+        this.maxAmount = BigNumber.max(askAmount, bidAmount).mul(1.5);
     }
 }
 OrderbookDeepChart.defaultOptions = {
@@ -574,5 +569,4 @@ OrderbookDeepChart.defaultOptions = {
     bids: [],
     asks: []
 };
-exports.OrderbookDeepChart = OrderbookDeepChart;
 //# sourceMappingURL=deepChartCanvas.js.map

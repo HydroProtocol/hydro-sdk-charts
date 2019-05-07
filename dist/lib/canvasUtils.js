@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
+export const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
     if (typeof stroke === 'undefined') {
         stroke = true;
     }
@@ -36,20 +34,20 @@ exports.roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
         ctx.stroke();
     }
 };
-exports.cubicEaseOut = (t, b, c, d) => {
+export const cubicEaseOut = (t, b, c, d) => {
     return c * ((t = t / d - 1) * t * t + 1) + b;
 };
-exports.toRGBA = function (color) {
+export const toRGBA = function (color) {
     if (color[0] === '#') {
         color = color.slice(1);
     }
     return [parseInt(color.slice(0, 2), 16), parseInt(color.slice(2, 4), 16), parseInt(color.slice(4), 16), 1];
 };
-exports.rgbaEaseOut = (from, to, past, total) => {
-    const r = exports.cubicEaseOut(past, from[0], to[0] - from[0], total);
-    const g = exports.cubicEaseOut(past, from[1], to[1] - from[1], total);
-    const b = exports.cubicEaseOut(past, from[2], to[2] - from[2], total);
-    const a = exports.cubicEaseOut(past, from[3], to[3] - from[3], total);
+export const rgbaEaseOut = (from, to, past, total) => {
+    const r = cubicEaseOut(past, from[0], to[0] - from[0], total);
+    const g = cubicEaseOut(past, from[1], to[1] - from[1], total);
+    const b = cubicEaseOut(past, from[2], to[2] - from[2], total);
+    const a = cubicEaseOut(past, from[3], to[3] - from[3], total);
     return [r, g, b, a];
 };
 //# sourceMappingURL=canvasUtils.js.map

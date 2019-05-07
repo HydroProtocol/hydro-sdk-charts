@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bids = [];
-exports.asks = [];
-exports.setBids = bidsArg => {
-    exports.bids = bidsArg;
+export let bids = [];
+export let asks = [];
+export const setBids = bidsArg => {
+    bids = bidsArg;
 };
-exports.setAsks = asksArg => {
-    exports.asks = asksArg;
+export const setAsks = asksArg => {
+    asks = asksArg;
 };
 //# sourceMappingURL=memoryOrderbook.js.map
