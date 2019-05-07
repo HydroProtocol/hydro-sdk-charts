@@ -1,9 +1,9 @@
-export var bids = [];
-export var asks = [];
-export var setBids = function (bidsArg) {
+export let bids = [];
+export let asks = [];
+export const setBids = bidsArg => {
     bids = bidsArg;
 };
-export var setAsks = function (asksArg) {
+export const setAsks = asksArg => {
     asks = asksArg;
 };
 //# sourceMappingURL=memoryOrderbook.js.map

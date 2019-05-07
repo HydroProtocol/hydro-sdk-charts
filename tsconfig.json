@@ -9,7 +9,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
-        "lib": ["es6", "es2015", "es2017", "dom", "dom.iterable", "es5"],
+        "lib": ["es6", "es2015", "es2017", "dom", "dom.iterable"],
         "module": "esnext",
         "moduleResolution": "node",
         "noImplicitAny": false,
@@ -21,7 +21,7 @@
         "strictNullChecks": true,
         "strict": true,
         "pretty": true,
-        "target": "es5",
+        "target": "es2016",
         "outDir": "./dist"
     },
     "include": ["src"],

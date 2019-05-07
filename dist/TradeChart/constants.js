@@ -1,4 +1,4 @@
-export var granularityOptions = [
+export const granularityOptions = [
     // {
     //   value: '1m',
     //   text: '1m'
@@ -32,7 +32,7 @@ export var granularityOptions = [
     //   text: '1mon'
     // },
 ];
-export var chartOptions = [
+export const chartOptions = [
     {
         value: 'candle',
         text: 'Candle'
@@ -42,7 +42,7 @@ export var chartOptions = [
         text: 'Line'
     }
 ];
-export var overlayOptions = [
+export const overlayOptions = [
     {
         hidden: true,
         value: 'overlay',
