@@ -1,9 +1,10 @@
-export let bids = [];
-export let asks = [];
-export const setBids = bidsArg => {
-    bids = bidsArg;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bids = [];
+exports.asks = [];
+exports.setBids = function (bidsArg) {
+    exports.bids = bidsArg;
 };
-export const setAsks = asksArg => {
-    asks = asksArg;
+exports.setAsks = function (asksArg) {
+    exports.asks = asksArg;
 };
-//# sourceMappingURL=memoryOrderbook.js.map

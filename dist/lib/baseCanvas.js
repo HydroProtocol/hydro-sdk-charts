@@ -1,9 +1,22 @@
-const getRatio = () => {
-    let ratio;
+"use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var getRatio = function () {
+    var ratio;
     ratio = (function () {
-        const ctx = window.document.createElement('canvas').getContext('2d');
-        const dpr = window.devicePixelRatio || 1;
-        const bsr = ctx.webkitBackingStorePixelRatio ||
+        var ctx = window.document.createElement('canvas').getContext('2d');
+        var dpr = window.devicePixelRatio || 1;
+        var bsr = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
             ctx.oBackingStorePixelRatio ||
@@ -14,41 +27,42 @@ const getRatio = () => {
     ratio = Math.max(ratio, 2);
     return ratio;
 };
-export class BaseCanvas {
-    constructor(id, options) {
+var BaseCanvas = /** @class */ (function () {
+    function BaseCanvas(id, options) {
+        var _this = this;
         this.ratio = 1;
         this.timer = 0;
         this.x = -1;
         this.y = -1;
         this.renderedTimer = {};
-        this.limitMaxFPS = (limit, fn) => {
-            const limitRenderGap = 1000 / limit;
-            const lastRenderAt = this.renderedTimer[fn];
-            if (!lastRenderAt || this.timer - lastRenderAt > limitRenderGap) {
-                fn.call(this);
-                this.renderedTimer[fn] = this.timer;
+        this.limitMaxFPS = function (limit, fn) {
+            var limitRenderGap = 1000 / limit;
+            var lastRenderAt = _this.renderedTimer[fn];
+            if (!lastRenderAt || _this.timer - lastRenderAt > limitRenderGap) {
+                fn.call(_this);
+                _this.renderedTimer[fn] = _this.timer;
             }
         };
-        this.draw = (timer) => {
-            this.timer = timer;
-            if (!this.running) {
+        this.draw = function (timer) {
+            _this.timer = timer;
+            if (!_this.running) {
                 return;
             }
-            this.adjustWidth();
-            this.adjustHeight();
-            this.drawFrame(timer);
-            const { showFPS } = this.options;
+            _this.adjustWidth();
+            _this.adjustHeight();
+            _this.drawFrame(timer);
+            var showFPS = _this.options.showFPS;
             if (showFPS) {
-                if (this.timer) {
-                    const fps = Math.floor(1000 / (timer - this.timer));
-                    this.drawFPS(fps);
+                if (_this.timer) {
+                    var fps = Math.floor(1000 / (timer - _this.timer));
+                    _this.drawFPS(fps);
                 }
             }
-            this.timer = timer;
-            if (this.options.afterDraw) {
-                this.options.afterDraw();
+            _this.timer = timer;
+            if (_this.options.afterDraw) {
+                _this.options.afterDraw();
             }
-            requestAnimationFrame(this.draw);
+            requestAnimationFrame(_this.draw);
         };
         this.ratio = getRatio();
         this.running = false;
@@ -58,73 +72,75 @@ export class BaseCanvas {
         this.setupCanvas();
         this.bindBaseMouseEvent();
     }
-    adjustWidth() {
-        const w = this.canvas.parentElement.clientWidth;
+    BaseCanvas.prototype.adjustWidth = function () {
+        var w = this.canvas.parentElement.clientWidth;
         this.setWidth(w * this.ratio);
-    }
-    adjustHeight() {
+    };
+    BaseCanvas.prototype.adjustHeight = function () {
         if (this.options.height === -1) {
             this.setHeight(this.canvas.parentElement.clientHeight * this.ratio);
         }
         else {
             this.setHeight(this.options.height * this.ratio);
         }
-    }
-    onResizeWidth() { }
-    setWidth(width) {
+    };
+    BaseCanvas.prototype.onResizeWidth = function () { };
+    BaseCanvas.prototype.setWidth = function (width) {
         if (this.canvas.width !== width) {
             this.canvas.width = width;
             if (this.onResizeWidth) {
                 this.onResizeWidth();
             }
         }
-    }
-    setHeight(height) {
+    };
+    BaseCanvas.prototype.setHeight = function (height) {
         if (this.canvas.height !== height) {
             this.canvas.height = height;
         }
-    }
-    updateOptions(options) {
-        this.options = Object.assign({}, this.options, options);
+    };
+    BaseCanvas.prototype.updateOptions = function (options) {
+        this.options = __assign({}, this.options, options);
         if (this.installOptions) {
             this.installOptions();
         }
-    }
-    setupCanvas() {
+    };
+    BaseCanvas.prototype.setupCanvas = function () {
         this.canvas.style.width = '100%';
         if (this.options.height === -1) {
             this.canvas.style.height = '100%';
         }
         else {
-            this.canvas.style.height = `${this.options.height}px`;
+            this.canvas.style.height = this.options.height + "px";
         }
         this.ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
-    }
-    start() {
+    };
+    BaseCanvas.prototype.start = function () {
         this.running = true;
         requestAnimationFrame(this.draw);
-    }
-    stop() {
+    };
+    BaseCanvas.prototype.stop = function () {
         this.running = false;
-    }
-    installOptions() { }
-    drawFPS(fps) {
+    };
+    BaseCanvas.prototype.installOptions = function () { };
+    BaseCanvas.prototype.drawFPS = function (fps) {
         this.ctx.textAlign = 'right';
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.fillText(`FPS: ${fps}`, this.canvas.width / 2, this.canvas.height / 2);
-    }
-    drawFrame(timer) {
+        this.ctx.fillText("FPS: " + fps, this.canvas.width / 2, this.canvas.height / 2);
+    };
+    BaseCanvas.prototype.drawFrame = function (timer) {
         throw new Error('draw frame not implement');
-    }
-    bindBaseMouseEvent() {
-        this.canvas.onmouseleave = e => {
-            this.x = -1;
-            this.y = -1;
+    };
+    BaseCanvas.prototype.bindBaseMouseEvent = function () {
+        var _this = this;
+        this.canvas.onmouseleave = function (e) {
+            _this.x = -1;
+            _this.y = -1;
         };
-        this.canvas.onmousemove = e => {
-            this.x = e.offsetX * this.ratio;
-            this.y = e.offsetY * this.ratio;
+        this.canvas.onmousemove = function (e) {
+            _this.x = e.offsetX * _this.ratio;
+            _this.y = e.offsetY * _this.ratio;
         };
-    }
-}
-//# sourceMappingURL=baseCanvas.js.map
+    };
+    return BaseCanvas;
+}());
+exports.BaseCanvas = BaseCanvas;

@@ -1,51 +1,77 @@
-import React, { Component } from 'react';
-import { format } from 'd3-format';
-import { timeFormat } from 'd3-time-format';
-import { curveMonotoneX } from 'd3-shape';
-import { ChartCanvas, Chart } from 'react-stockcharts';
-import { BarSeries, CandlestickSeries, AreaSeries, LineSeries } from 'react-stockcharts/lib/series';
-import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
-import { EdgeIndicator, CrossHairCursor, CurrentCoordinate, MouseCoordinateX, MouseCoordinateY } from 'react-stockcharts/lib/coordinates';
-import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { fitDimensions, fitWidth } from 'react-stockcharts/lib/helper';
-import { last } from 'react-stockcharts/lib/utils';
-import { ema } from 'react-stockcharts/lib/indicator';
-import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
-import { ClickCallback } from 'react-stockcharts/lib/interactive';
-import BigNumber from 'bignumber.js';
-import Select from '../Select';
-import { granularityOptions, chartOptions, overlayOptions } from './constants';
-import { themeDark, themeLight } from '../variables/variables';
-import './style.css';
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __importStar(require("react"));
+var d3_format_1 = require("d3-format");
+var d3_time_format_1 = require("d3-time-format");
+var d3_shape_1 = require("d3-shape");
+var react_stockcharts_1 = require("react-stockcharts");
+var series_1 = require("react-stockcharts/lib/series");
+var axes_1 = require("react-stockcharts/lib/axes");
+var coordinates_1 = require("react-stockcharts/lib/coordinates");
+var scale_1 = require("react-stockcharts/lib/scale");
+var helper_1 = require("react-stockcharts/lib/helper");
+var utils_1 = require("react-stockcharts/lib/utils");
+var indicator_1 = require("react-stockcharts/lib/indicator");
+var tooltip_1 = require("react-stockcharts/lib/tooltip");
+var interactive_1 = require("react-stockcharts/lib/interactive");
+var bignumber_js_1 = __importDefault(require("bignumber.js"));
+var Select_1 = __importDefault(require("../Select"));
+var constants_1 = require("./constants");
+var variables_1 = require("../variables/variables");
 // one candle width is 18px * 0.5
-const CANDLE_WIDTH_AND_GAP = 18;
-class TradeChart extends Component {
-    constructor(props) {
-        super(props);
-        const isShowEMA12LocalStorage = window.localStorage.getItem('isShowEMA12');
-        const isShowEMA26LocalStorage = window.localStorage.getItem('isShowEMA26');
-        const isShowEMA12 = isShowEMA12LocalStorage === null ? false : isShowEMA12LocalStorage === 'true';
-        const isShowEMA26 = isShowEMA26LocalStorage === null ? false : isShowEMA26LocalStorage === 'true';
-        const granularityStr = window.localStorage.getItem('granularityStr') || '1d';
-        const chart = window.localStorage.getItem('chart') || 'candle';
-        this.state = {
-            chart,
-            granularityStr,
-            isShowEMA12,
-            isShowEMA26
+var CANDLE_WIDTH_AND_GAP = 18;
+var TradeChart = /** @class */ (function (_super) {
+    __extends(TradeChart, _super);
+    function TradeChart(props) {
+        var _this = _super.call(this, props) || this;
+        var isShowEMA12LocalStorage = window.localStorage.getItem('isShowEMA12');
+        var isShowEMA26LocalStorage = window.localStorage.getItem('isShowEMA26');
+        var isShowEMA12 = isShowEMA12LocalStorage === null ? false : isShowEMA12LocalStorage === 'true';
+        var isShowEMA26 = isShowEMA26LocalStorage === null ? false : isShowEMA26LocalStorage === 'true';
+        var granularityStr = window.localStorage.getItem('granularityStr') || '1d';
+        var chart = window.localStorage.getItem('chart') || 'candle';
+        _this.state = {
+            chart: chart,
+            granularityStr: granularityStr,
+            isShowEMA12: isShowEMA12,
+            isShowEMA26: isShowEMA26
         };
+        return _this;
     }
-    getVariables() {
-        const { theme } = this.props;
-        return theme === 'light' ? themeLight : themeDark;
-    }
-    componentWillUnmount() {
+    TradeChart.prototype.getVariables = function () {
+        var theme = this.props.theme;
+        return theme === 'light' ? variables_1.themeLight : variables_1.themeDark;
+    };
+    TradeChart.prototype.componentWillUnmount = function () {
         if (this.interval) {
             window.clearInterval(this.interval);
         }
-    }
-    handleLoadMore(start, end) {
-        const { handleLoadMore } = this.props;
+    };
+    TradeChart.prototype.handleLoadMore = function (start, end) {
+        var handleLoadMore = this.props.handleLoadMore;
         if (!handleLoadMore) {
             return;
         }
@@ -54,19 +80,19 @@ class TradeChart extends Component {
             return;
         }
         // this.loadLeft(start, end);
-        handleLoadMore({ start, end });
-    }
-    fixData(data) {
-        const fd = []; // fixedData
-        const granularityNum = this.generateParams(this.state.granularityStr).granularityNum;
-        for (let i = 0; i < data.length; i++) {
+        handleLoadMore({ start: start, end: end });
+    };
+    TradeChart.prototype.fixData = function (data) {
+        var fd = []; // fixedData
+        var granularityNum = this.generateParams(this.state.granularityStr).granularityNum;
+        for (var i = 0; i < data.length; i++) {
             data[i].open = parseFloat(data[i].open);
             data[i].high = parseFloat(data[i].high);
             data[i].low = parseFloat(data[i].low);
             data[i].close = parseFloat(data[i].close);
             data[i].volume = parseFloat(data[i].volume);
-            let scale = Math.ceil((data[i].time || data[i].date) / 1000 / granularityNum);
-            let gap = i === 0 ? -1 : scale - fd[fd.length - 1].date;
+            var scale = Math.ceil((data[i].time || data[i].date) / 1000 / granularityNum);
+            var gap = i === 0 ? -1 : scale - fd[fd.length - 1].date;
             if (i === 0 || gap === 1) {
                 fd.push({
                     date: scale,
@@ -78,9 +104,9 @@ class TradeChart extends Component {
                 });
                 continue;
             }
-            let lastFd = fd[fd.length - 1];
+            var lastFd = fd[fd.length - 1];
             if (gap === 0) {
-                let volume = lastFd.volume + data[i].volume;
+                var volume = lastFd.volume + data[i].volume;
                 if (lastFd.open === data[i].open &&
                     lastFd.high === data[i].high &&
                     lastFd.low === data[i].low &&
@@ -94,11 +120,11 @@ class TradeChart extends Component {
                     high: Math.max(lastFd.high, data[i].high),
                     low: Math.min(lastFd.low, data[i].low),
                     close: data[i].close,
-                    volume
+                    volume: volume
                 };
             }
             else if (gap > 1) {
-                for (let j = 1; j < gap; j++) {
+                for (var j = 1; j < gap; j++) {
                     fd.push({
                         date: lastFd.date + j,
                         open: lastFd.close,
@@ -118,13 +144,15 @@ class TradeChart extends Component {
                 });
             }
         }
-        for (let i = 0; i < fd.length; i++) {
+        for (var i = 0; i < fd.length; i++) {
             fd[i].date = new Date(fd[i].date * 1000 * granularityNum);
         }
         return fd;
-    }
-    generateParams(granularityStr, from = null, to = null) {
-        let granularityNum;
+    };
+    TradeChart.prototype.generateParams = function (granularityStr, from, to) {
+        if (from === void 0) { from = null; }
+        if (to === void 0) { to = null; }
+        var granularityNum;
         to = to || Math.floor(new Date().getTime() / 1000);
         switch (granularityStr) {
             // case "1m":
@@ -166,50 +194,51 @@ class TradeChart extends Component {
                 break;
         }
         return {
-            from,
-            to,
-            granularityNum
+            from: from,
+            to: to,
+            granularityNum: granularityNum
         };
-    }
-    fitLengthToShow() {
-        const { width } = this.props;
+    };
+    TradeChart.prototype.fitLengthToShow = function () {
+        var width = this.props.width;
         // ChartCanvas margin right 50;
         return Math.ceil((width - 50) / CANDLE_WIDTH_AND_GAP);
-    }
-    selectEMA(value) {
+    };
+    TradeChart.prototype.selectEMA = function (value) {
         if (value === 'ema12') {
             this.setState({ isShowEMA12: !this.state.isShowEMA12 });
-            window.localStorage.setItem('isShowEMA12', `${!this.state.isShowEMA12}`);
+            window.localStorage.setItem('isShowEMA12', "" + !this.state.isShowEMA12);
         }
         else if (value === 'ema26') {
             this.setState({ isShowEMA26: !this.state.isShowEMA26 });
-            window.localStorage.setItem('isShowEMA26', `${!this.state.isShowEMA26}`);
+            window.localStorage.setItem('isShowEMA26', "" + !this.state.isShowEMA26);
         }
-    }
-    changeScroll() {
-        let style = document.body.style.overflow;
+    };
+    TradeChart.prototype.changeScroll = function () {
+        var style = document.body.style.overflow;
         document.body.style.overflow = style === 'hidden' ? 'auto' : 'hidden';
-    }
-    render() {
-        const { width, ratio, height, currentMarket, clickCallback } = this.props;
-        const ema26 = ema()
+    };
+    TradeChart.prototype.render = function () {
+        var _this = this;
+        var _a = this.props, width = _a.width, ratio = _a.ratio, height = _a.height, currentMarket = _a.currentMarket, clickCallback = _a.clickCallback;
+        var ema26 = indicator_1.ema()
             .id(0)
             .options({ windowSize: 26 })
-            .merge((d, c) => {
+            .merge(function (d, c) {
             d.ema26 = c;
         })
-            .accessor(d => d.ema26);
-        const ema12 = ema()
+            .accessor(function (d) { return d.ema26; });
+        var ema12 = indicator_1.ema()
             .id(1)
             .options({ windowSize: 12 })
-            .merge((d, c) => {
+            .merge(function (d, c) {
             d.ema12 = c;
         })
-            .accessor(d => d.ema12);
-        const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(d => d.date);
-        let fixedData = this.fixData(this.props.data);
+            .accessor(function (d) { return d.ema12; });
+        var xScaleProvider = scale_1.discontinuousTimeScaleProvider.inputDateAccessor(function (d) { return d.date; });
+        var fixedData = this.fixData(this.props.data);
         if (fixedData.length === 0) {
-            const elem = {
+            var elem = {
                 date: new Date(),
                 open: 0,
                 high: 0,
@@ -232,19 +261,19 @@ class TradeChart extends Component {
                 }
             ];
         }
-        const calculatedData = ema12(ema26(fixedData));
-        const { data, xScale, xAccessor, displayXAccessor } = xScaleProvider(calculatedData);
-        const dataLen = data.length;
-        const fitLen = this.fitLengthToShow();
-        let xExtents = [dataLen - 1, dataLen - 1 - fitLen + 1];
+        var calculatedData = ema12(ema26(fixedData));
+        var _b = xScaleProvider(calculatedData), data = _b.data, xScale = _b.xScale, xAccessor = _b.xAccessor, displayXAccessor = _b.displayXAccessor;
+        var dataLen = data.length;
+        var fitLen = this.fitLengthToShow();
+        var xExtents = [dataLen - 1, dataLen - 1 - fitLen + 1];
         if (fitLen < dataLen) {
-            const start = this.props.start || xAccessor(last(data));
-            const end = this.props.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
+            var start = this.props.start || xAccessor(utils_1.last(data));
+            var end = this.props.end || xAccessor(data[Math.max(0, dataLen - fitLen)]);
             xExtents = [start, end];
         }
         // selection height is 48
-        const chartHeight = height - 48;
-        const MovingAverageTooltipOptions = [];
+        var chartHeight = height - 48;
+        var MovingAverageTooltipOptions = [];
         if (this.state.isShowEMA26) {
             MovingAverageTooltipOptions.push({
                 yAccessor: ema26.accessor(),
@@ -262,78 +291,79 @@ class TradeChart extends Component {
             });
         }
         // const priceDecimals = currentMarket.priceDecimals;
-        const priceDecimals = 5;
-        let maxHigh = 0;
-        for (let i = 0; i < fixedData.length; i++) {
+        var priceDecimals = 5;
+        var maxHigh = 0;
+        for (var i = 0; i < fixedData.length; i++) {
             if (fixedData[i].high > maxHigh) {
                 maxHigh = fixedData[i].high;
             }
         }
-        const priceLen = Math.floor(maxHigh).toString().length + priceDecimals;
-        const marginRight = priceLen > 5 ? priceLen * 9 : 50;
-        const variables = this.getVariables();
-        const { styles } = this.props;
-        const background = (styles && styles.background) || variables.backgroundContainer;
-        const upColor = (styles && styles.upColor) || variables.green;
-        const downColor = (styles && styles.downColor) || variables.red;
-        const axisColor = (styles && styles.axisColor) || variables.secondColor;
-        const barColor = (styles && styles.barColor) || variables.chartBarColor;
-        return (React.createElement("div", { onMouseEnter: () => this.changeScroll(), onMouseLeave: () => this.changeScroll(), style: { height: '100%', position: 'relative', background }, className: "hydro-sdk-TradeChart flex-column" },
+        var priceLen = Math.floor(maxHigh).toString().length + priceDecimals;
+        var marginRight = priceLen > 5 ? priceLen * 9 : 50;
+        var variables = this.getVariables();
+        var styles = this.props.styles;
+        var background = (styles && styles.background) || variables.backgroundContainer;
+        var upColor = (styles && styles.upColor) || variables.green;
+        var downColor = (styles && styles.downColor) || variables.red;
+        var axisColor = (styles && styles.axisColor) || variables.secondColor;
+        var barColor = (styles && styles.barColor) || variables.chartBarColor;
+        return (react_1.default.createElement("div", { onMouseEnter: function () { return _this.changeScroll(); }, onMouseLeave: function () { return _this.changeScroll(); }, style: { height: '100%', position: 'relative', background: background }, className: "hydro-sdk-TradeChart flex-column" },
             this.renderSelections(),
-            !(this.state.loading && this.state.data.length === 0) && (React.createElement(ChartCanvas, { height: chartHeight, ratio: ratio, width: width, margin: { left: 0, right: marginRight, top: 10, bottom: 30 }, type: 'svg', seriesName: "MSFT", data: data, xScale: this.state.xScale || xScale, xAccessor: this.state.xAccessor || xAccessor, displayXAccessor: this.state.displayXAccessor || displayXAccessor, onLoadMore: (start, end) => this.handleLoadMore(start, end), pointsPerPxThreshold: 2, minPointsPerPxThreshold: 1 / 50, xExtents: xExtents },
-                React.createElement(Chart, { id: 2, height: chartHeight * 0.3, width: width, yExtents: d => d.volume, origin: (w, h) => [0, h - chartHeight * 0.3] },
-                    React.createElement(XAxis, { axisAt: "bottom", orient: "bottom", tickStroke: axisColor, stroke: "none", ticks: Math.ceil((width - marginRight) / 160) }),
-                    React.createElement(MouseCoordinateX, { at: "bottom", orient: "bottom", displayFormat: timeFormat('%Y-%m-%d') }),
-                    React.createElement(BarSeries, { yAccessor: d => d.volume, fill: barColor, widthRatio: 0.4, opacity: 1 })),
-                React.createElement(Chart, { id: 1, yExtents: [d => [d.high, d.low], ema26.accessor(), ema12.accessor()], height: chartHeight * 0.8, width: width, padding: { left: 0, right: 0, top: 1, bottom: 1 } },
-                    React.createElement(ClickCallback, { onClick: (moreProps, e) => {
-                            const { mouseXY, chartConfig, currentItem } = moreProps;
-                            const result = {
+            !(this.state.loading && this.state.data.length === 0) && (react_1.default.createElement(react_stockcharts_1.ChartCanvas, { height: chartHeight, ratio: ratio, width: width, margin: { left: 0, right: marginRight, top: 10, bottom: 30 }, type: 'svg', seriesName: "MSFT", data: data, xScale: this.state.xScale || xScale, xAccessor: this.state.xAccessor || xAccessor, displayXAccessor: this.state.displayXAccessor || displayXAccessor, onLoadMore: function (start, end) { return _this.handleLoadMore(start, end); }, pointsPerPxThreshold: 2, minPointsPerPxThreshold: 1 / 50, xExtents: xExtents },
+                react_1.default.createElement(react_stockcharts_1.Chart, { id: 2, height: chartHeight * 0.3, width: width, yExtents: function (d) { return d.volume; }, origin: function (w, h) { return [0, h - chartHeight * 0.3]; } },
+                    react_1.default.createElement(axes_1.XAxis, { axisAt: "bottom", orient: "bottom", tickStroke: axisColor, stroke: "none", ticks: Math.ceil((width - marginRight) / 160) }),
+                    react_1.default.createElement(coordinates_1.MouseCoordinateX, { at: "bottom", orient: "bottom", displayFormat: d3_time_format_1.timeFormat('%Y-%m-%d') }),
+                    react_1.default.createElement(series_1.BarSeries, { yAccessor: function (d) { return d.volume; }, fill: barColor, widthRatio: 0.4, opacity: 1 })),
+                react_1.default.createElement(react_stockcharts_1.Chart, { id: 1, yExtents: [function (d) { return [d.high, d.low]; }, ema26.accessor(), ema12.accessor()], height: chartHeight * 0.8, width: width, padding: { left: 0, right: 0, top: 1, bottom: 1 } },
+                    react_1.default.createElement(interactive_1.ClickCallback, { onClick: function (moreProps, e) {
+                            var mouseXY = moreProps.mouseXY, chartConfig = moreProps.chartConfig, currentItem = moreProps.currentItem;
+                            var result = {
                                 candleData: currentItem,
-                                clickedPrice: new BigNumber(chartConfig.yScale.invert(mouseXY[1]).toString())
+                                clickedPrice: new bignumber_js_1.default(chartConfig.yScale.invert(mouseXY[1]).toString())
                             };
                             // console.log(result);
                             if (clickCallback) {
                                 clickCallback(result);
                             }
                         } }),
-                    React.createElement(YAxis, { axisAt: "right", orient: "right", ticks: 5, tickStroke: axisColor, stroke: "none", tickFormat: format(`.${priceDecimals}f`) }),
-                    this.state.chart === 'candle' ? (React.createElement(CandlestickSeries, { widthRatio: 0.5, opacity: 1, candleStrokeWidth: "1", stroke: d => (d.close > d.open ? upColor : downColor), wickStroke: d => (d.close > d.open ? upColor : downColor), fill: d => (d.close > d.open ? 'none' : downColor) })) : (React.createElement(AreaSeries, { yAccessor: d => d.close, strokeWidth: 2, stroke: upColor, fill: "url(#LineGradient)", interpolation: curveMonotoneX })),
-                    this.state.isShowEMA26 && React.createElement(LineSeries, { yAccessor: ema26.accessor(), stroke: ema26.stroke() }),
-                    this.state.isShowEMA12 && React.createElement(LineSeries, { yAccessor: ema12.accessor(), stroke: ema12.stroke() }),
-                    this.state.isShowEMA26 && React.createElement(CurrentCoordinate, { yAccessor: ema26.accessor(), fill: ema26.stroke() }),
-                    this.state.isShowEMA12 && React.createElement(CurrentCoordinate, { yAccessor: ema12.accessor(), fill: ema12.stroke() }),
-                    React.createElement(MovingAverageTooltip, { origin: [15, 8], textFill: axisColor, options: MovingAverageTooltipOptions, displayFormat: format(`.${priceDecimals}f`), width: priceDecimals > 5 ? 65 + 6 * (priceDecimals - 5) : 65 }),
-                    React.createElement("defs", null,
-                        React.createElement("linearGradient", { id: "LineGradient", x1: "0", y1: "100%", x2: "0", y2: "0%" },
-                            React.createElement("stop", { offset: "0%", stopColor: upColor, stopOpacity: 0 }),
-                            React.createElement("stop", { offset: "50%", stopColor: upColor, stopOpacity: 0.1 }),
-                            React.createElement("stop", { offset: "100%", stopColor: upColor, stopOpacity: 0.2 }))),
-                    React.createElement(EdgeIndicator, { itemType: "last", orient: "right", edgeAt: "right", yAccessor: d => d.close, fill: d => (d.close > d.open ? upColor : downColor), lineStroke: d => (d.close > d.open ? upColor : downColor), strokeWidth: 0, displayFormat: format(`.${priceDecimals}f`), rectWidth: priceLen > 5 ? priceLen * 9 : 50 }),
-                    React.createElement(MouseCoordinateY, { at: "right", orient: "right", displayFormat: format(`.${priceDecimals}f`), rectWidth: priceLen > 5 ? priceLen * 9 : 50 }),
-                    React.createElement(OHLCTooltip, { origin: [12, -2], textFill: axisColor, labelFill: axisColor, ohlcFormat: v => format(`.${priceDecimals}f`)(v) + '  ' })),
-                React.createElement(CrossHairCursor, { stroke: axisColor })))));
-    }
-    renderSelections() {
-        return (React.createElement("div", { className: "chartSelection" },
-            React.createElement("div", { className: "selection1" },
-                React.createElement(Select, { size: 'small', theme: this.props.theme, options: granularityOptions, selected: this.state.granularityStr, onSelect: option => {
+                    react_1.default.createElement(axes_1.YAxis, { axisAt: "right", orient: "right", ticks: 5, tickStroke: axisColor, stroke: "none", tickFormat: d3_format_1.format("." + priceDecimals + "f") }),
+                    this.state.chart === 'candle' ? (react_1.default.createElement(series_1.CandlestickSeries, { widthRatio: 0.5, opacity: 1, candleStrokeWidth: "1", stroke: function (d) { return (d.close > d.open ? upColor : downColor); }, wickStroke: function (d) { return (d.close > d.open ? upColor : downColor); }, fill: function (d) { return (d.close > d.open ? 'none' : downColor); } })) : (react_1.default.createElement(series_1.AreaSeries, { yAccessor: function (d) { return d.close; }, strokeWidth: 2, stroke: upColor, fill: "url(#LineGradient)", interpolation: d3_shape_1.curveMonotoneX })),
+                    this.state.isShowEMA26 && react_1.default.createElement(series_1.LineSeries, { yAccessor: ema26.accessor(), stroke: ema26.stroke() }),
+                    this.state.isShowEMA12 && react_1.default.createElement(series_1.LineSeries, { yAccessor: ema12.accessor(), stroke: ema12.stroke() }),
+                    this.state.isShowEMA26 && react_1.default.createElement(coordinates_1.CurrentCoordinate, { yAccessor: ema26.accessor(), fill: ema26.stroke() }),
+                    this.state.isShowEMA12 && react_1.default.createElement(coordinates_1.CurrentCoordinate, { yAccessor: ema12.accessor(), fill: ema12.stroke() }),
+                    react_1.default.createElement(tooltip_1.MovingAverageTooltip, { origin: [15, 8], textFill: axisColor, options: MovingAverageTooltipOptions, displayFormat: d3_format_1.format("." + priceDecimals + "f"), width: priceDecimals > 5 ? 65 + 6 * (priceDecimals - 5) : 65 }),
+                    react_1.default.createElement("defs", null,
+                        react_1.default.createElement("linearGradient", { id: "LineGradient", x1: "0", y1: "100%", x2: "0", y2: "0%" },
+                            react_1.default.createElement("stop", { offset: "0%", stopColor: upColor, stopOpacity: 0 }),
+                            react_1.default.createElement("stop", { offset: "50%", stopColor: upColor, stopOpacity: 0.1 }),
+                            react_1.default.createElement("stop", { offset: "100%", stopColor: upColor, stopOpacity: 0.2 }))),
+                    react_1.default.createElement(coordinates_1.EdgeIndicator, { itemType: "last", orient: "right", edgeAt: "right", yAccessor: function (d) { return d.close; }, fill: function (d) { return (d.close > d.open ? upColor : downColor); }, lineStroke: function (d) { return (d.close > d.open ? upColor : downColor); }, strokeWidth: 0, displayFormat: d3_format_1.format("." + priceDecimals + "f"), rectWidth: priceLen > 5 ? priceLen * 9 : 50 }),
+                    react_1.default.createElement(coordinates_1.MouseCoordinateY, { at: "right", orient: "right", displayFormat: d3_format_1.format("." + priceDecimals + "f"), rectWidth: priceLen > 5 ? priceLen * 9 : 50 }),
+                    react_1.default.createElement(tooltip_1.OHLCTooltip, { origin: [12, -2], textFill: axisColor, labelFill: axisColor, ohlcFormat: function (v) { return d3_format_1.format("." + priceDecimals + "f")(v) + '  '; } })),
+                react_1.default.createElement(coordinates_1.CrossHairCursor, { stroke: axisColor })))));
+    };
+    TradeChart.prototype.renderSelections = function () {
+        var _this = this;
+        return (react_1.default.createElement("div", { className: "chartSelection" },
+            react_1.default.createElement("div", { className: "selection1" },
+                react_1.default.createElement(Select_1.default, { size: 'small', theme: this.props.theme, options: constants_1.granularityOptions, selected: this.state.granularityStr, onSelect: function (option) {
                         // this.loadData(option.value);
-                        const { clickGranularity } = this.props;
-                        this.setState({ granularityStr: option.value });
+                        var clickGranularity = _this.props.clickGranularity;
+                        _this.setState({ granularityStr: option.value });
                         if (clickGranularity) {
                             clickGranularity({ value: option.value });
                         }
                         window.localStorage.setItem('granularityStr', option.value);
                     } })),
-            React.createElement("div", { className: "selection2" },
-                React.createElement(Select, { size: 'small', theme: this.props.theme, options: chartOptions, selected: this.state.chart, onSelect: option => {
-                        this.setState({ chart: option.value });
+            react_1.default.createElement("div", { className: "selection2" },
+                react_1.default.createElement(Select_1.default, { size: 'small', theme: this.props.theme, options: constants_1.chartOptions, selected: this.state.chart, onSelect: function (option) {
+                        _this.setState({ chart: option.value });
                         window.localStorage.setItem('chart', option.value);
                     } })),
-            React.createElement("div", { className: "selection3" },
-                React.createElement(Select, { size: 'small', theme: this.props.theme, options: overlayOptions, selected: 'overlay', onSelect: option => this.selectEMA(option.value) }))));
-    }
-}
-export default fitWidth(fitDimensions(TradeChart));
-//# sourceMappingURL=index.js.map
+            react_1.default.createElement("div", { className: "selection3" },
+                react_1.default.createElement(Select_1.default, { size: 'small', theme: this.props.theme, options: constants_1.overlayOptions, selected: 'overlay', onSelect: function (option) { return _this.selectEMA(option.value); } }))));
+    };
+    return TradeChart;
+}(react_1.Component));
+exports.default = helper_1.fitWidth(helper_1.fitDimensions(TradeChart));

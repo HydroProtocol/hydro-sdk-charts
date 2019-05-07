@@ -20,7 +20,11 @@ npm install @wangleiddex/hydro-sdk-charts --save
 
 Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/js/TradeChartTestData.js)
 
+The example below also shows how to include the css from this package if your build system supports requiring css files (webpack is one that does). 
 ```
+import { TradeChart } from '@wangleiddex/hydro-sdk-charts';
+import '@wangleiddex/hydro-sdk-charts/dist/style.css';
+
 <TradeChart
   theme="dark" // or light
   data={testData}
@@ -65,6 +69,8 @@ interface Props {
 Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/js/DeepChartTestData.js)
 
 ```
+import { DeepChart } from '@wangleiddex/hydro-sdk-charts';
+
 <DeepChart
   theme="dark" // or light
   asks={bids}

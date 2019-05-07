@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import './light.css';
-import './dark.css';
 
 export interface Option {
   value: any;

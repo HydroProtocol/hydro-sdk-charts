@@ -1,4 +1,6 @@
-export const granularityOptions = [
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.granularityOptions = [
     // {
     //   value: '1m',
     //   text: '1m'
@@ -32,7 +34,7 @@ export const granularityOptions = [
     //   text: '1mon'
     // },
 ];
-export const chartOptions = [
+exports.chartOptions = [
     {
         value: 'candle',
         text: 'Candle'
@@ -42,7 +44,7 @@ export const chartOptions = [
         text: 'Line'
     }
 ];
-export const overlayOptions = [
+exports.overlayOptions = [
     {
         hidden: true,
         value: 'overlay',
@@ -57,4 +59,3 @@ export const overlayOptions = [
         text: 'EMA26'
     }
 ];
-//# sourceMappingURL=constants.js.map

@@ -25,7 +25,6 @@ import BigNumber from 'bignumber.js';
 import Select from '../Select';
 import { granularityOptions, chartOptions, overlayOptions } from './constants';
 import { themeDark, themeLight } from '../variables/variables';
-import './style.css';
 
 // one candle width is 18px * 0.5
 const CANDLE_WIDTH_AND_GAP = 18;
