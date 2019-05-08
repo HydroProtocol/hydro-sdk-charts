@@ -39,7 +39,7 @@ interface Styles {
 
 interface Props {
   data: any;
-  currentMarket: any;
+  priceDecimals: any;
   theme?: any;
   styles?: Styles;
   clickCallback?: any;
@@ -240,7 +240,7 @@ class TradeChart extends Component<Props, any> {
   }
 
   public render() {
-    const { width, ratio, height, currentMarket, clickCallback } = this.props;
+    const { width, ratio, height, clickCallback, priceDecimals } = this.props;
 
     const ema26 = ema()
       .id(0)
@@ -315,8 +315,7 @@ class TradeChart extends Component<Props, any> {
         windowSize: ema12.options().windowSize
       });
     }
-    // const priceDecimals = currentMarket.priceDecimals;
-    const priceDecimals = 5;
+
     let maxHigh = 0;
     for (let i = 0; i < fixedData.length; i++) {
       if (fixedData[i].high > maxHigh) {
