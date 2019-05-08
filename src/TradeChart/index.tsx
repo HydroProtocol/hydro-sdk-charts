@@ -383,7 +383,7 @@ class TradeChart extends Component<Props, any> {
                   const { mouseXY, chartConfig, currentItem } = moreProps;
                   const result = {
                     candleData: currentItem,
-                    clickedPrice: new BigNumber(chartConfig.yScale.invert(mouseXY[1]).toString())
+                    clickedPrice: chartConfig.yScale.invert(mouseXY[1]).toString()
                   };
                   // console.log(result);
                   if (clickCallback) {
