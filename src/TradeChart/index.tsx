@@ -39,14 +39,16 @@ interface Styles {
 
 interface Props {
   data: any;
-  priceDecimals: any;
-  theme?: any;
+  priceDecimals: number;
+  theme?: string;
   styles?: Styles;
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
-  start?: any;
-  end?: any;
+  granularityStr?: string;
+  needFixData?: boolean;
+  start?: number;
+  end?: number;
   // do'nt need pass manually
   width: any;
   ratio: any;
@@ -101,7 +103,7 @@ class TradeChart extends Component<Props, any> {
 
   public fixData(data) {
     const fd: any = []; // fixedData
-    const granularityNum = this.generateParams(this.state.granularityStr).granularityNum;
+    const granularityNum = this.generateParams(this.props.granularityStr || this.state.granularityStr).granularityNum;
     for (let i = 0; i < data.length; i++) {
       data[i].open = parseFloat(data[i].open);
       data[i].high = parseFloat(data[i].high);
@@ -259,7 +261,7 @@ class TradeChart extends Component<Props, any> {
       .accessor(d => d.ema12);
 
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(d => d.date);
-    let fixedData = this.fixData(this.props.data);
+    let fixedData = this.props.needFixData ? this.fixData(this.props.data) : this.props.data;
     if (fixedData.length === 0) {
       const elem = {
         date: new Date(),

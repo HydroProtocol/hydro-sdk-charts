@@ -51,14 +51,19 @@ interface Styles {
 
 interface Props {
   data: any;
-  currentMarket: any;
-  theme?: any;
+  priceDecimals: number;
+  theme?: string;
   styles?: Styles;
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
-  start?: any;
-  end?: any;
+  // fix missing or repeated automatically
+  needFixData?: boolean; 
+  // if needFixData is true, granularityStr is required
+  granularityStr?: string;
+  // start and end in the data list for current view
+  start?: number;
+  end?: number;
 }
 ```
 
