@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import { curveMonotoneX } from 'd3-shape';
@@ -15,13 +14,10 @@ import {
 } from 'react-stockcharts/lib/coordinates';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
 import { fitDimensions, fitWidth } from 'react-stockcharts/lib/helper';
-import { last, hexToRGBA, createVerticalLinearGradient } from 'react-stockcharts/lib/utils';
+import { last } from 'react-stockcharts/lib/utils';
 import { ema } from 'react-stockcharts/lib/indicator';
 import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
-import { discontinuousTimeScaleProviderBuilder } from 'react-stockcharts/lib/scale';
 import { ClickCallback } from 'react-stockcharts/lib/interactive';
-
-import BigNumber from 'bignumber.js';
 import Select from '../Select';
 import { granularityOptions, chartOptions, overlayOptions } from './constants';
 import { themeDark, themeLight } from '../variables/variables';
@@ -46,7 +42,6 @@ interface Props {
   handleLoadMore?: any;
   clickGranularity?: any;
   granularityStr?: string;
-  needFixData?: boolean;
   start?: number;
   end?: number;
   // do'nt need pass manually
@@ -261,7 +256,7 @@ class TradeChart extends Component<Props, any> {
       .accessor(d => d.ema12);
 
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(d => d.date);
-    let fixedData = this.props.needFixData ? this.fixData(this.props.data) : this.props.data;
+    let fixedData = this.fixData(this.props.data);
     if (fixedData.length === 0) {
       const elem = {
         date: new Date(),

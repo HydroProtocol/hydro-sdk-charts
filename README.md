@@ -28,6 +28,7 @@ import '@wangleiddex/hydro-sdk-charts/dist/style.css';
 <TradeChart
   theme="dark" // or light
   data={testData}
+  granularityStr="1d"
   styles={{ upColor: '#00d99f' }}
   clickCallback={result => {
     console.log('result: ', result);
@@ -51,16 +52,13 @@ interface Styles {
 
 interface Props {
   data: any;
+  granularityStr: string; // "1d", "1h", "5m"
   priceDecimals: number;
   theme?: string;
   styles?: Styles;
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
-  // fix missing or repeated automatically
-  needFixData?: boolean; 
-  // if needFixData is true, granularityStr is required
-  granularityStr?: string;
   // start and end in the data list for current view
   start?: number;
   end?: number;
