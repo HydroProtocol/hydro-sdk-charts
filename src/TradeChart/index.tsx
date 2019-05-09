@@ -169,42 +169,21 @@ class TradeChart extends Component<Props, any> {
     let granularityNum: number;
     to = to || Math.floor(new Date().getTime() / 1000);
     switch (granularityStr) {
-      // case "1m":
-      //   granularityNum = 60;
-      //   from = from || to - 60 * 60 * 24 * 365 / 60; // 356 * 24 points, from 6 days ago;
-      //   break;
       case '5m':
         granularityNum = 60 * 5;
-        from = from || to - (60 * 60 * 24 * 365) / 12; // 356 * 24 points, from 1 month ago
+        from = from || to - 60 * 60 * 24 * 7; // 12 * 24 * 7 = 2016 points, from 7 days ago
         break;
-      // case "15m":
-      //   granularityNum = 60 * 15;
-      //   from = from || to - 60 * 60 * 24 * 365 / 4; // 356 * 24 points, from 3 month ago
-      //   break;
       case '1h':
         granularityNum = 60 * 60;
-        from = from || to - 60 * 60 * 24 * 365; // 356 * 24 points, from 1 year ago
+        from = from || to - 60 * 60 * 24 * 30; // 24 * 30 = 720 points, from 30 days ago
         break;
-      // case "6h":
-      //   granularityNum = 60 * 60 * 6;
-      //   from = from || to - 60 * 60 * 24 * 365; // 356 * 4 points, from 1 year ago
-      //   break;
       case '1d':
         granularityNum = 60 * 60 * 24;
-        from = from || to - 60 * 60 * 24 * 365; // 356 points, from 1 year ago
+        from = from || to - 60 * 60 * 24 * 365; // 365 points, from 365 days ago
         break;
-      // case "1w":
-      //   granularityNum = 60 * 60 * 24 * 7;
-      //   from = from || to - 60 * 60 * 24 * 365; // 52 points, from 1 year ago
-      //   break;
-      // case "1mon":
-      //   granularityNum = 60 * 60 * 24 * 30;
-      //   from = from || to - 60 * 60 * 24 * 365; // 12 points, from 1 year ago
-      //   break;
       default:
-        // same as 1h
-        granularityNum = 60 * 60;
-        from = from || to - 60 * 60 * 24 * 365;
+        granularityNum = 60 * 60 * 24;
+        from = from || to - 60 * 60 * 24 * 365; // 365 points, from 365 days ago
         break;
     }
 
