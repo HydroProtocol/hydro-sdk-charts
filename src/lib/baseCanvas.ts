@@ -125,9 +125,10 @@ export class BaseCanvas {
     return true;
   }
 
-  protected drawCommonFPS = (timer: number) => {
-    this.timer = timer;
-
+  // Now, method below is running smoothly!
+  // Won't merge drawCommonFPS and drawHighFPS to one function and use if(isOnHover()) to decide to run common or high FPS.
+  // I tried using one function and judge to draw, it's a little slowly when mouse enter, since it need 200ms to draw when enter.
+  protected drawCommonFPS = (timer: number, once: boolean = false) => {
     if (!this.running) {
       return;
     }
@@ -143,7 +144,9 @@ export class BaseCanvas {
       if (showFPS) {
         if (this.timer) {
           const fps = Math.floor(1000 / (timer - this.timer));
-          this.drawFPS(fps);
+          if (fps >= 1) {
+            this.drawFPS(fps);
+          }
         }
       }
 
@@ -154,7 +157,9 @@ export class BaseCanvas {
       }
     }
 
-    setTimeout(() => this.drawCommonFPS(new Date().getTime()), 200);
+    if (!once) {
+      setTimeout(() => this.drawCommonFPS(new Date().getTime()), 200);
+    }
   };
 
   protected drawHighFPS = (timer: number) => {
@@ -170,7 +175,9 @@ export class BaseCanvas {
       if (showFPS) {
         if (this.timer) {
           const fps = Math.floor(1000 / (timer - this.timer));
-          this.drawFPS(fps);
+          if (fps >= 1) {
+            this.drawFPS(fps);
+          }
         }
       }
 
@@ -198,6 +205,8 @@ export class BaseCanvas {
     this.canvas.onmouseleave = e => {
       this.x = -1;
       this.y = -1;
+
+      this.drawCommonFPS(new Date().getTime(), true);
     };
 
     this.canvas.onmousemove = e => {
