@@ -108,7 +108,8 @@ export class BaseCanvas {
 
   public start() {
     this.running = true;
-    requestAnimationFrame(this.draw);
+    this.drawCommonFPS(new Date().getTime());
+    requestAnimationFrame(this.drawHighFPS);
   }
 
   public stop() {
@@ -117,34 +118,70 @@ export class BaseCanvas {
 
   protected installOptions() {}
 
-  protected draw = (timer: number) => {
+  public isOnHover(): boolean {
+    if (this.x === -1 || this.y === -1) {
+      return false;
+    }
+    return true;
+  }
+
+  protected drawCommonFPS = (timer: number) => {
     this.timer = timer;
 
     if (!this.running) {
       return;
     }
 
-    this.adjustWidth();
-    this.adjustHeight();
+    if (!this.isOnHover()) {
+      this.adjustWidth();
+      this.adjustHeight();
 
-    this.drawFrame(timer);
+      this.drawFrame(timer);
 
-    const { showFPS } = this.options;
+      const { showFPS } = this.options;
 
-    if (showFPS) {
-      if (this.timer) {
-        const fps = Math.floor(1000 / (timer - this.timer));
-        this.drawFPS(fps);
+      if (showFPS) {
+        if (this.timer) {
+          const fps = Math.floor(1000 / (timer - this.timer));
+          this.drawFPS(fps);
+        }
+      }
+
+      this.timer = timer;
+
+      if (this.options.afterDraw) {
+        this.options.afterDraw();
       }
     }
 
-    this.timer = timer;
+    setTimeout(() => this.drawCommonFPS(new Date().getTime()), 200);
+  };
 
-    if (this.options.afterDraw) {
-      this.options.afterDraw();
+  protected drawHighFPS = (timer: number) => {
+    if (!this.running) {
+      return;
     }
 
-    requestAnimationFrame(this.draw);
+    if (this.isOnHover()) {
+      this.drawFrame(timer);
+
+      const { showFPS } = this.options;
+
+      if (showFPS) {
+        if (this.timer) {
+          const fps = Math.floor(1000 / (timer - this.timer));
+          this.drawFPS(fps);
+        }
+      }
+
+      this.timer = timer;
+
+      if (this.options.afterDraw) {
+        this.options.afterDraw();
+      }
+    }
+
+    requestAnimationFrame(this.drawHighFPS);
   };
 
   protected drawFPS(fps: number) {
