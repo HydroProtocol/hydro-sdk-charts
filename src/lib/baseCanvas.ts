@@ -84,6 +84,10 @@ export class BaseCanvas {
     if (this.installOptions) {
       this.installOptions();
     }
+
+    if (this.running) {
+      this.drawCommonFPS(performance.now(), true);
+    }
   }
 
   protected limitMaxFPS = (limit, fn) => {
