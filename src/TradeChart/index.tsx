@@ -468,7 +468,7 @@ class TradeChart extends Component<Props, any> {
             size={'small'}
             theme={this.props.theme}
             options={chartOptions}
-            selected={this.state.chart}
+            selected={this.state.chart || this.props.defaultChart}
             onSelect={option => {
               this.setState({ chart: option.value });
               window.localStorage.setItem('chart', option.value);
