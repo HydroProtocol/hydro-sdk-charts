@@ -42,6 +42,7 @@ interface Props {
   handleLoadMore?: any;
   clickGranularity?: any;
   granularityStr?: string;
+  defaultChart?: string;
   start?: number;
   end?: number;
   // do'nt need pass manually
@@ -61,7 +62,7 @@ class TradeChart extends Component<Props, any> {
     const isShowEMA12 = isShowEMA12LocalStorage === null ? false : isShowEMA12LocalStorage === 'true';
     const isShowEMA26 = isShowEMA26LocalStorage === null ? false : isShowEMA26LocalStorage === 'true';
     const granularityStr = window.localStorage.getItem('granularityStr') || '1d';
-    const chart = window.localStorage.getItem('chart') || 'candle';
+    const chart = window.localStorage.getItem('chart');
 
     this.state = {
       chart,
@@ -375,7 +376,7 @@ class TradeChart extends Component<Props, any> {
                 stroke="none"
                 tickFormat={format(`.${priceDecimals}f`)}
               />
-              {this.state.chart === 'candle' ? (
+              {(this.state.chart || this.props.defaultChart) === 'candle' ? (
                 <CandlestickSeries
                   widthRatio={0.5}
                   opacity={1}

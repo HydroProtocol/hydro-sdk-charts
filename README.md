@@ -58,7 +58,8 @@ interface Props {
   styles?: Styles;
   clickCallback?: any;
   handleLoadMore?: any;
-  clickGranularity?: any;
+  clickGranularity?: string;
+  defaultChart?: string; // 'candle', 'line'
   // start and end in the data list for current view
   start?: number;
   end?: number;
