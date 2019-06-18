@@ -14,6 +14,7 @@ interface Styles {
   askColorArea?: string;
   bidColor?: string;
   bidColorArea?: string;
+  fontFamily?: string;
 }
 
 interface Props {
@@ -46,6 +47,7 @@ class DeepChart extends PureComponent<Props, any> {
       amountDecimals,
       baseTokenSymbol: baseToken,
       quoteTokenSymbol: quoteToken,
+      fontFamily: styles && styles.fontFamily,
       titleColor: (styles && styles.titleColor) || variables.mainColor,
       axisLabelColor: (styles && styles.axisLabelColor) || variables.secondColor,
       axisColor: (styles && styles.axisColor) || variables.borderGray,

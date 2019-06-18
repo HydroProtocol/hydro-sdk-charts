@@ -101,6 +101,7 @@ interface Styles {
   askColorArea?: string;
   bidColor?: string;
   bidColorArea?: string;
+  fontFamily?: string;
 }
 
 interface Props {

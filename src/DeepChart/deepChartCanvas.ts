@@ -40,6 +40,7 @@ interface OrderbookDeepChartOptions extends BaseCanvasOptions {
   redArea?: any;
   titleColor?: any;
   containerBackgroundColor?: any;
+  fontFamily?: string;
 }
 
 export class OrderbookDeepChart extends BaseCanvas {
@@ -61,6 +62,7 @@ export class OrderbookDeepChart extends BaseCanvas {
     containerBackgroundColor: '#0a0909',
     paddingTop: 20,
     xAxisHeight: 24,
+    fontFamily: 'sans-serif',
     bids: [],
     asks: []
   };
@@ -125,7 +127,7 @@ export class OrderbookDeepChart extends BaseCanvas {
     const lineY = this.getXAxisY();
 
     this.ctx.lineWidth = 1 * this.ratio;
-    this.ctx.font = `${11 * this.ratio}px Roboto`;
+    this.ctx.font = `${11 * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'top';
     this.ctx.fillStyle = this.options.rowBackgroundColor;
@@ -281,7 +283,7 @@ export class OrderbookDeepChart extends BaseCanvas {
 
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
-    this.ctx.font = `${18 * this.ratio}px Roboto`;
+    this.ctx.font = `${18 * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.strokeStyle = this.options.axisColor!;
     this.ctx.fillStyle = this.options.containerBackgroundColor;
     roundRect(
@@ -343,12 +345,12 @@ export class OrderbookDeepChart extends BaseCanvas {
     this.ctx.textAlign = 'center';
     this.ctx.fillStyle = '#FFFFFF';
     this.ctx.textBaseline = 'hanging';
-    this.ctx.font = `${priceTextSize * this.ratio}px Roboto`;
+    this.ctx.font = `${priceTextSize * this.ratio}px ${this.options.fontFamily}`;
     const currentPriceText = this.price.toFixed(this.options.priceDecimals!);
     const currentPriceTextMetrics = this.ctx.measureText(currentPriceText);
 
     this.ctx.fillStyle = this.options.axisColor!;
-    this.ctx.font = `${helperTextSize * this.ratio}px Roboto`;
+    this.ctx.font = `${helperTextSize * this.ratio}px ${this.options.fontFamily}`;
     const helperText = 'Mid Market Price';
     const helperTextMetrics = this.ctx.measureText(helperText);
 
@@ -365,12 +367,12 @@ export class OrderbookDeepChart extends BaseCanvas {
     // draw price
     this.ctx.textAlign = 'center';
     this.ctx.fillStyle = this.options.titleColor;
-    this.ctx.font = `${priceTextSize * this.ratio}px Roboto`;
+    this.ctx.font = `${priceTextSize * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.fillText(currentPriceText, _x, y + padding * this.ratio);
 
     // draw helper text
     this.ctx.fillStyle = '#949697';
-    this.ctx.font = `${helperTextSize * this.ratio}px Roboto`;
+    this.ctx.font = `${helperTextSize * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.fillText(helperText, _x, y + padding * this.ratio + priceTextSize * this.ratio + textGapSize * this.ratio);
 
     // draw separator
@@ -450,15 +452,15 @@ export class OrderbookDeepChart extends BaseCanvas {
     const amountDecimals = this.options.amountDecimals!;
 
     const priceText = `${price.toFixed(priceDecimals)} ${this.options.quoteTokenSymbol}`;
-    this.ctx.font = `${fontSize * this.ratio}px Roboto`;
+    this.ctx.font = `${fontSize * this.ratio}px ${this.options.fontFamily}`;
     const priceTextMetric = this.ctx.measureText(priceText);
 
     const totalAmountText = `${totalAmount.toFixed(amountDecimals)} ${this.options.baseTokenSymbol}`;
-    this.ctx.font = `${fontSize * this.ratio}px Roboto`;
+    this.ctx.font = `${fontSize * this.ratio}px ${this.options.fontFamily}`;
     const totalAmountTextMetric = this.ctx.measureText(totalAmountText);
 
     const totalCostText = `${totalCost.toFixed(priceDecimals)} ${this.options.quoteTokenSymbol}`;
-    this.ctx.font = `${fontSize * this.ratio}px Roboto`;
+    this.ctx.font = `${fontSize * this.ratio}px ${this.options.fontFamily}`;
     const totalCostTextMetric = this.ctx.measureText(totalCostText);
 
     let tooltipWidth =
@@ -499,7 +501,7 @@ export class OrderbookDeepChart extends BaseCanvas {
     this.ctx.fill();
     // this.ctx.stroke();
 
-    this.ctx.font = `${fontSize * this.ratio}px Roboto`;
+    this.ctx.font = `${fontSize * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.textBaseline = 'hanging';
 
     this.ctx.fillStyle = this.options.axisLabelColor!;
