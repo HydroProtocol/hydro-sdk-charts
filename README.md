@@ -29,6 +29,7 @@ import '@wangleiddex/hydro-sdk-charts/dist/style.css';
   theme="dark" // or light
   data={testData}
   granularityStr="1d"
+  priceDecimals={4}
   styles={{ upColor: '#00d99f' }}
   clickCallback={result => {
     console.log('result: ', result);
