@@ -33,11 +33,17 @@ interface Styles {
   barColor?: string;
 }
 
+interface CustomEdge {
+  price: number;
+  color: string;
+}
+
 interface Props {
   data: any;
   priceDecimals: number;
   theme?: string;
   styles?: Styles;
+  customEdge?: CustomEdge;
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: any;
@@ -303,7 +309,7 @@ class TradeChart extends Component<Props, any> {
     const marginRight = priceLen > 5 ? priceLen * 9 : 50;
 
     const variables = this.getVariables();
-    const { styles } = this.props;
+    const { styles, customEdge } = this.props;
     const background = (styles && styles.background) || variables.backgroundContainer;
     const upColor = (styles && styles.upColor) || variables.green;
     const downColor = (styles && styles.downColor) || variables.red;
@@ -423,6 +429,19 @@ class TradeChart extends Component<Props, any> {
                 displayFormat={format(`.${priceDecimals}f`)}
                 rectWidth={priceLen > 5 ? priceLen * 9 : 50}
               />
+              {customEdge && customEdge.price && !isNaN(customEdge.price) && isFinite(customEdge.price) ? (
+                <EdgeIndicator
+                  itemType="first"
+                  orient="right"
+                  edgeAt="right"
+                  yAccessor={d => customEdge.price}
+                  fill={d => customEdge.color}
+                  lineStroke={d => customEdge.color}
+                  strokeWidth={0}
+                  displayFormat={format(`.${priceDecimals}f`)}
+                  rectWidth={priceLen > 5 ? priceLen * 9 : 50}
+                />
+              ) : null}
               <MouseCoordinateY
                 at="right"
                 orient="right"
