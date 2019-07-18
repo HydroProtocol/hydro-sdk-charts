@@ -1,7 +1,5 @@
 # hydro-sdk-charts
 
-**WIP:** this project is under very active development, and it is not ready for production usage. This warning will be removed when it is reliable.
-
 The hydro-sdk-charts including trade chart and deep chart.
 
 ## Installation
@@ -29,6 +27,7 @@ import '@wangleiddex/hydro-sdk-charts/dist/style.css';
   theme="dark" // or light
   data={testData}
   granularityStr="1d"
+  priceDecimals={4}
   styles={{ upColor: '#00d99f' }}
   clickCallback={result => {
     console.log('result: ', result);
