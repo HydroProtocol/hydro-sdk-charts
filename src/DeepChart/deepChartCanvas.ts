@@ -25,6 +25,7 @@ interface OrderbookDeepChartOptions extends BaseCanvasOptions {
   afterDraw?: any;
   rowBackgroundColor?: any;
   showFPS?: boolean;
+  borderColor?: string;
   axisColor?: string;
   axisLabelColor?: string;
   formatXAxisLabel?: any;
@@ -49,6 +50,7 @@ export class OrderbookDeepChart extends BaseCanvas {
     quoteTokenSymbol: '',
     height: 200,
     showFPS: false,
+    borderColor: '#363b41',
     axisColor: 'red',
     axisLabelColor: 'white',
     priceDecimals: 5,
@@ -499,7 +501,11 @@ export class OrderbookDeepChart extends BaseCanvas {
     this.ctx.rect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
     this.ctx.fillStyle = this.options.containerBackgroundColor;
     this.ctx.fill();
-    // this.ctx.stroke();
+    this.ctx.lineWidth = 1;
+    if (this.options.borderColor) {
+      this.ctx.strokeStyle = this.options.borderColor;
+    }
+    this.ctx.stroke();
 
     this.ctx.font = `${fontSize * this.ratio}px ${this.options.fontFamily}`;
     this.ctx.textBaseline = 'hanging';

@@ -7,6 +7,7 @@ import { setBids, setAsks } from './memoryOrderbook';
 interface Styles {
   titleColor?: string;
   axisLabelColor?: string;
+  borderColor?: string;
   axisColor?: string;
   rowBackgroundColor?: string;
   containerBackgroundColor?: string;
@@ -49,6 +50,7 @@ class DeepChart extends PureComponent<Props, any> {
       quoteTokenSymbol: quoteToken,
       fontFamily: styles && styles.fontFamily,
       titleColor: (styles && styles.titleColor) || variables.mainColor,
+      borderColor: (styles && styles.borderColor) || variables.borderGray,
       axisLabelColor: (styles && styles.axisLabelColor) || variables.secondColor,
       axisColor: (styles && styles.axisColor) || variables.borderGray,
       rowBackgroundColor: (styles && styles.rowBackgroundColor) || variables.backgroundContainer,
@@ -58,7 +60,6 @@ class DeepChart extends PureComponent<Props, any> {
       green: (styles && styles.bidColor) || variables.green,
       greenArea: (styles && styles.bidColorArea) || variables.greenArea,
       onClick: result => {
-        // console.log(result);
         if (clickCallback) {
           clickCallback(result);
         }

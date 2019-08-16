@@ -94,6 +94,7 @@ interface Styles {
   titleColor?: string;
   axisLabelColor?: string;
   axisColor?: string;
+  borderColor?: string;
   rowBackgroundColor?: string;
   containerBackgroundColor?: string;
   askColor?: string;
