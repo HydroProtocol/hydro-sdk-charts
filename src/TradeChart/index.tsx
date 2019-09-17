@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import { curveMonotoneX } from 'd3-shape';
@@ -19,7 +19,6 @@ import { ema } from 'react-stockcharts/lib/indicator';
 import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
 import { ClickCallback } from 'react-stockcharts/lib/interactive';
 import Select from '../Select';
-import { granularityOptions, chartOptions, overlayOptions } from './constants';
 import { themeDark, themeLight } from '../variables/variables';
 
 // one candle width is 18px * 0.5
@@ -38,11 +37,26 @@ interface CustomEdge {
   color: string;
 }
 
+interface I18nItems {
+  overlay?: string;
+  line?: string;
+  candle?: string;
+  oneDay?: string;
+  oneHour?: string;
+  fiveMinutes?: string;
+  open?: string;
+  high?: string;
+  low?: string;
+  close?: string;
+  volume?: string;
+}
+
 interface Props {
   data: any;
   priceDecimals: number;
   theme?: string;
   styles?: Styles;
+  i18n?: I18nItems;
   customEdge?: CustomEdge;
   clickCallback?: any;
   handleLoadMore?: any;
@@ -51,13 +65,14 @@ interface Props {
   defaultChart?: string;
   start?: number;
   end?: number;
+  xTickFormat?: any;
   // do'nt need pass manually
   width: any;
   ratio: any;
   height: any;
 }
 
-class TradeChart extends Component<Props, any> {
+class TradeChart extends PureComponent<Props, any> {
   private interval: number | undefined;
 
   constructor(props) {
@@ -223,7 +238,7 @@ class TradeChart extends Component<Props, any> {
   }
 
   public render() {
-    const { width, ratio, height, clickCallback, priceDecimals } = this.props;
+    const { width, ratio, height, clickCallback, priceDecimals, xTickFormat } = this.props;
 
     const ema26 = ema()
       .id(0)
@@ -351,6 +366,7 @@ class TradeChart extends Component<Props, any> {
                 tickStroke={axisColor}
                 stroke="none"
                 ticks={Math.ceil((width - marginRight) / 160)}
+                tickFormat={xTickFormat}
               />
               <MouseCoordinateX at="bottom" orient="bottom" displayFormat={timeFormat('%Y-%m-%d')} />
               <BarSeries yAccessor={d => d.volume} fill={barColor} widthRatio={0.4} opacity={1} />
@@ -453,6 +469,7 @@ class TradeChart extends Component<Props, any> {
                 textFill={axisColor}
                 labelFill={axisColor}
                 ohlcFormat={v => format(`.${priceDecimals}f`)(v) + '  '}
+                displayTexts={this.getOHLCDisplayTexts()}
               />
             </Chart>
             <CrossHairCursor stroke={axisColor} />
@@ -469,10 +486,9 @@ class TradeChart extends Component<Props, any> {
           <Select
             size={'small'}
             theme={this.props.theme}
-            options={granularityOptions}
+            options={this.getGranularityOptions()}
             selected={this.state.granularityStr}
             onSelect={option => {
-              // this.loadData(option.value);
               const { clickGranularity } = this.props;
               this.setState({ granularityStr: option.value });
               if (clickGranularity) {
@@ -486,7 +502,7 @@ class TradeChart extends Component<Props, any> {
           <Select
             size={'small'}
             theme={this.props.theme}
-            options={chartOptions}
+            options={this.getChartOptions()}
             selected={this.state.chart || this.props.defaultChart}
             onSelect={option => {
               this.setState({ chart: option.value });
@@ -498,13 +514,90 @@ class TradeChart extends Component<Props, any> {
           <Select
             size={'small'}
             theme={this.props.theme}
-            options={overlayOptions}
+            options={this.getOverlayOptions()}
             selected={'overlay'}
             onSelect={option => this.selectEMA(option.value)}
           />
         </div>
       </div>
     );
+  }
+
+  private getGranularityOptions() {
+    const i18n = this.props.i18n || {};
+
+    const granularityOptions = [
+      {
+        value: '5m',
+        text: i18n.fiveMinutes || '5m'
+      },
+      {
+        value: '1h',
+        text: i18n.oneHour || '1h'
+      },
+      {
+        value: '1d',
+        text: i18n.oneDay || '1d'
+      }
+    ];
+
+    return granularityOptions;
+  }
+
+  private getChartOptions() {
+    const i18n = this.props.i18n || {};
+
+    const chartOptions = [
+      {
+        value: 'candle',
+        text: i18n.candle || 'Candle'
+      },
+      {
+        value: 'line',
+        text: i18n.line || 'Line'
+      }
+    ];
+
+    return chartOptions;
+  }
+
+  private getOverlayOptions() {
+    const i18n = this.props.i18n || {};
+
+    const overlayOptions = [
+      {
+        hidden: true,
+        value: 'overlay',
+        text: i18n.overlay || 'Overlay'
+      },
+      {
+        value: 'ema12',
+        text: 'EMA12'
+      },
+      {
+        value: 'ema26',
+        text: 'EMA26'
+      }
+    ];
+
+    return overlayOptions;
+  }
+
+  private getOHLCDisplayTexts() {
+    const i18n = this.props.i18n || {};
+
+    // https://github.com/rrag/react-stockcharts/blob/master/src/lib/tooltip/OHLCTooltip.js#L96
+    const displayTexts = {
+      d: 'Date: ',
+      o: ` ${i18n.open || 'O'}: `,
+      h: ` ${i18n.high || 'H'}: `,
+      l: ` ${i18n.low || 'L'}: `,
+      c: ` ${i18n.close || 'C'}: `,
+      v: ` ${i18n.volume || 'Vol'}: `,
+      na: 'n/a'
+    };
+
+    return displayTexts;
   }
 }
 

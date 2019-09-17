@@ -49,12 +49,27 @@ interface Styles {
   barColor?: string;
 }
 
+interface I18nItems {
+  overlay?: string;
+  line?: string;
+  candle?: string;
+  oneDay?: string;
+  oneHour?: string;
+  fiveMinutes?: string;
+  open?: string;
+  high?: string;
+  low?: string;
+  close?: string;
+  volume?: string;
+}
+
 interface Props {
   data: any;
   granularityStr: string; // "1d", "1h", "5m"
   priceDecimals: number;
   theme?: string;
   styles?: Styles;
+  i18n?: I18nItems;
   clickCallback?: any;
   handleLoadMore?: any;
   clickGranularity?: string;
@@ -62,6 +77,7 @@ interface Props {
   // start and end in the data list for current view
   start?: number;
   end?: number;
+  xTickFormat?: any;
 }
 ```
 
@@ -104,6 +120,14 @@ interface Styles {
   fontFamily?: string;
 }
 
+interface I18nItems {
+  midMarketPrice?: string;
+  price?: string;
+  cost?: string;
+  sell?: string;
+  buy?: string;
+}
+
 interface Props {
   bids: any;
   asks: any;
@@ -111,6 +135,7 @@ interface Props {
   quoteToken: any;
   theme?: any;
   styles?: Styles;
+  i18n?: I18nItems;
   priceDecimals?: any;
   amountDecimals?: any;
   clickCallback?: any;

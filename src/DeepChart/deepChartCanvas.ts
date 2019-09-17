@@ -42,6 +42,12 @@ interface OrderbookDeepChartOptions extends BaseCanvasOptions {
   titleColor?: any;
   containerBackgroundColor?: any;
   fontFamily?: string;
+
+  midMarketPriceTranslation: string;
+  priceTranslation: string;
+  costTranslation: string;
+  sellTranslation: string;
+  buyTranslation: string;
 }
 
 export class OrderbookDeepChart extends BaseCanvas {
@@ -66,7 +72,13 @@ export class OrderbookDeepChart extends BaseCanvas {
     xAxisHeight: 24,
     fontFamily: 'sans-serif',
     bids: [],
-    asks: []
+    asks: [],
+
+    midMarketPriceTranslation: 'Mid Market Price',
+    priceTranslation: 'Price',
+    costTranslation: 'Cost',
+    sellTranslation: 'Sell',
+    buyTranslation: 'Buy'
   };
 
   protected options: OrderbookDeepChartOptions;
@@ -353,7 +365,7 @@ export class OrderbookDeepChart extends BaseCanvas {
 
     this.ctx.fillStyle = this.options.axisColor!;
     this.ctx.font = `${helperTextSize * this.ratio}px ${this.options.fontFamily}`;
-    const helperText = 'Mid Market Price';
+    const helperText = this.options.midMarketPriceTranslation;
     const helperTextMetrics = this.ctx.measureText(helperText);
 
     // draw rect
@@ -512,15 +524,19 @@ export class OrderbookDeepChart extends BaseCanvas {
 
     this.ctx.fillStyle = this.options.axisLabelColor!;
     this.ctx.textAlign = 'left';
-    this.ctx.fillText('Price', tooltipX + tooltipPadding * this.ratio, tooltipY + tooltipPadding * this.ratio);
+    this.ctx.fillText(
+      this.options.priceTranslation,
+      tooltipX + tooltipPadding * this.ratio,
+      tooltipY + tooltipPadding * this.ratio
+    );
     this.ctx.fillStyle = side === 'buy' ? this.options.red : this.options.green;
     this.ctx.fillText(
-      capitalizeFirstLetter(side),
+      side === 'buy' ? this.options.buyTranslation : this.options.sellTranslation,
       tooltipX + tooltipPadding * this.ratio,
       tooltipY + (fontSize + tooltipPadding + lineGap) * this.ratio
     );
     this.ctx.fillText(
-      'Cost',
+      this.options.costTranslation,
       tooltipX + tooltipPadding * this.ratio,
       tooltipY + (tooltipPadding + (lineGap + fontSize) * 2) * this.ratio
     );

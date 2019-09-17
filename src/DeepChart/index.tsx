@@ -4,6 +4,14 @@ import { OrderbookDeepChart } from './deepChartCanvas';
 import { themeDark, themeLight } from '../variables/variables';
 import { setBids, setAsks } from './memoryOrderbook';
 
+interface I18nItems {
+  midMarketPrice?: string;
+  price?: string;
+  cost?: string;
+  sell?: string;
+  buy?: string;
+}
+
 interface Styles {
   titleColor?: string;
   axisLabelColor?: string;
@@ -25,6 +33,7 @@ interface Props {
   quoteToken: any;
   theme?: any;
   styles?: Styles;
+  i18n?: I18nItems;
   priceDecimals?: any;
   amountDecimals?: any;
   clickCallback?: any;
@@ -39,7 +48,7 @@ class DeepChart extends PureComponent<Props, any> {
   }
 
   public getCommonOptions() {
-    const { baseToken, quoteToken, priceDecimals, amountDecimals, clickCallback, styles } = this.props;
+    const { baseToken, quoteToken, priceDecimals, amountDecimals, clickCallback, styles, i18n } = this.props;
     const variables = this.getVariables();
     return {
       height: -1,
@@ -48,6 +57,7 @@ class DeepChart extends PureComponent<Props, any> {
       amountDecimals,
       baseTokenSymbol: baseToken,
       quoteTokenSymbol: quoteToken,
+
       fontFamily: styles && styles.fontFamily,
       titleColor: (styles && styles.titleColor) || variables.mainColor,
       borderColor: (styles && styles.borderColor) || variables.borderGray,
@@ -59,14 +69,23 @@ class DeepChart extends PureComponent<Props, any> {
       redArea: (styles && styles.askColorArea) || variables.redArea,
       green: (styles && styles.bidColor) || variables.green,
       greenArea: (styles && styles.bidColorArea) || variables.greenArea,
+
+      midMarketPriceTranslation: (i18n && i18n.midMarketPrice) || 'Mid Market Price',
+      priceTranslation: (i18n && i18n.price) || 'Price',
+      costTranslation: (i18n && i18n.cost) || 'Cost',
+      sellTranslation: (i18n && i18n.sell) || 'Sell',
+      buyTranslation: (i18n && i18n.buy) || 'Buy',
+
       onClick: result => {
         if (clickCallback) {
           clickCallback(result);
         }
       },
+
       formatXAxisLabel: (price: string): string => {
         return `${price.toString()} ${this.props.quoteToken}`;
       },
+
       formatYAxisLabel: (amount: BigNumber): string => {
         if (amount.gt(1000)) {
           return `${amount.div(1000).toFixed(2)}k`;
