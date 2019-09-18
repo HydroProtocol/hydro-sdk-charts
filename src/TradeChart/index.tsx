@@ -70,10 +70,12 @@ interface Props {
   width: any;
   ratio: any;
   height: any;
+  setChartRef?: any;
 }
 
 class TradeChart extends PureComponent<Props, any> {
   private interval: number | undefined;
+  private chartRef: any;
 
   constructor(props) {
     super(props);
@@ -84,6 +86,8 @@ class TradeChart extends PureComponent<Props, any> {
     const isShowEMA26 = isShowEMA26LocalStorage === null ? false : isShowEMA26LocalStorage === 'true';
     const granularityStr = window.localStorage.getItem('granularityStr') || '1d';
     const chart = window.localStorage.getItem('chart');
+
+    this.chartRef = React.createRef();
 
     this.state = {
       chart,
@@ -237,6 +241,16 @@ class TradeChart extends PureComponent<Props, any> {
     document.body.style.overflow = style === 'hidden' ? 'auto' : 'hidden';
   }
 
+  public getXExtents() {
+    return this.chartRef.current.getDataInfo().xScale.domain();
+  }
+
+  public componentDidMount() {
+    if (this.props.setChartRef) {
+      this.props.setChartRef(this.chartRef);
+    }
+  }
+
   public render() {
     const { width, ratio, height, clickCallback, priceDecimals, xTickFormat } = this.props;
 
@@ -340,6 +354,7 @@ class TradeChart extends PureComponent<Props, any> {
         {this.renderSelections()}
         {!(this.state.loading && this.state.data.length === 0) && (
           <ChartCanvas
+            ref={this.chartRef}
             height={chartHeight}
             ratio={ratio}
             width={width}
