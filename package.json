@@ -8,6 +8,7 @@
   },
   "main": "./dist/index.js",
   "scripts": {
+    "prepare": "npm run clean && npm run build",
     "clean": "rm -rf ./dist",
     "build": "npm run build-js && npm run build-css",
     "build-js": "tsc -p .",
