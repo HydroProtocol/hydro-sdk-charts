@@ -2,24 +2,25 @@ import React, { PureComponent } from 'react';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import { curveMonotoneX } from 'd3-shape';
-import { ChartCanvas, Chart } from 'react-stockcharts';
-import { BarSeries, CandlestickSeries, AreaSeries, LineSeries } from 'react-stockcharts/lib/series';
-import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
+import { ChartCanvas, Chart } from 'react-financial-charts';
+import { BarSeries, CandlestickSeries, AreaSeries, LineSeries } from 'react-financial-charts/lib/series';
+import { XAxis, YAxis } from 'react-financial-charts/lib/axes';
 import {
   EdgeIndicator,
   CrossHairCursor,
   CurrentCoordinate,
   MouseCoordinateX,
   MouseCoordinateY
-} from 'react-stockcharts/lib/coordinates';
-import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { fitDimensions, fitWidth } from 'react-stockcharts/lib/helper';
-import { last } from 'react-stockcharts/lib/utils';
-import { ema } from 'react-stockcharts/lib/indicator';
-import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
-import { ClickCallback } from 'react-stockcharts/lib/interactive';
+} from 'react-financial-charts/lib/coordinates';
+import { discontinuousTimeScaleProvider } from 'react-financial-charts/lib/scale';
+import { last } from 'react-financial-charts/lib/utils';
+import { ema } from 'react-financial-charts/lib/indicator';
+import { MovingAverageTooltip, OHLCTooltip } from 'react-financial-charts/lib/tooltip';
+import { ClickCallback } from 'react-financial-charts/lib/interactive';
 import Select from '../Select';
 import { themeDark, themeLight } from '../variables/variables';
+import { withDeviceRatio } from "react-financial-charts/lib/utils";
+import {withSize} from './withSize'
 
 // one candle width is 18px * 0.5
 const CANDLE_WIDTH_AND_GAP = 18;
@@ -378,6 +379,7 @@ class TradeChart extends PureComponent<Props, any> {
               <XAxis
                 axisAt="bottom"
                 orient="bottom"
+                tickLabelFill={axisColor}
                 tickStroke={axisColor}
                 stroke="none"
                 ticks={Math.ceil((width - marginRight) / 160)}
@@ -409,6 +411,7 @@ class TradeChart extends PureComponent<Props, any> {
                 axisAt="right"
                 orient="right"
                 ticks={5}
+                tickLabelFill={axisColor}
                 tickStroke={axisColor}
                 stroke="none"
                 tickFormat={format(`.${priceDecimals}f`)}
@@ -417,7 +420,7 @@ class TradeChart extends PureComponent<Props, any> {
                 <CandlestickSeries
                   widthRatio={0.5}
                   opacity={1}
-                  candleStrokeWidth="1"
+                  candleStrokeWidth={1}
                   stroke={d => (d.close > d.open ? upColor : downColor)}
                   wickStroke={d => (d.close > d.open ? upColor : downColor)}
                   fill={d => (d.close > d.open ? 'none' : downColor)}
@@ -485,6 +488,7 @@ class TradeChart extends PureComponent<Props, any> {
                 labelFill={axisColor}
                 ohlcFormat={v => format(`.${priceDecimals}f`)(v) + '  '}
                 displayTexts={this.getOHLCDisplayTexts()}
+                lastAsDefault={true}
               />
             </Chart>
             <CrossHairCursor stroke={axisColor} />
@@ -601,7 +605,7 @@ class TradeChart extends PureComponent<Props, any> {
   private getOHLCDisplayTexts() {
     const i18n = this.props.i18n || {};
 
-    // https://github.com/rrag/react-stockcharts/blob/master/src/lib/tooltip/OHLCTooltip.js#L96
+    // https://github.com/rrag/react-financial-charts/blob/master/src/lib/tooltip/OHLCTooltip.js#L96
     const displayTexts = {
       d: 'Date: ',
       o: ` ${i18n.open || 'O'}: `,
@@ -616,4 +620,4 @@ class TradeChart extends PureComponent<Props, any> {
   }
 }
 
-export default fitWidth(fitDimensions(TradeChart));
+export default withSize()(withDeviceRatio()(TradeChart));

@@ -23,18 +23,21 @@
         width: 80px;
         margin-left: 8px;
     }
+
+    .select {
+        width: 80px;
+    }
 }
 
-// stockcharts
-.react-stockcharts-x-axis,
-.react-stockcharts-y-axis {
+.react-financial-charts-x-axis,
+.react-financial-charts-y-axis {
     .tick {
         line {
             display: none;
         }
     }
 }
-.react-stockcharts-tooltip-hover {
+.react-financial-charts-tooltip-hover {
     text {
         tspan:nth-of-type(1),
         tspan:nth-of-type(2) {
@@ -45,11 +48,11 @@
         }
     }
 }
-.react-stockcharts-tooltip {
+.react-financial-charts-tooltip {
     cursor: default;
 }
 // line stroke is using fill, but our fill with green border is none.
-// https://github.com/rrag/react-stockcharts/blob/6cc29406ee305a6011a8f9437d3f47deb549629d/src/lib/series/CandlestickSeries.js#L127
+// https://github.com/rrag/react-financial-charts/blob/6cc29406ee305a6011a8f9437d3f47deb549629d/src/lib/series/CandlestickSeries.js#L127
 // line[stroke='none'] {
 //     stroke: #00c6a3;
 // }
