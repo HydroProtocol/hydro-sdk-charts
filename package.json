@@ -1,6 +1,6 @@
 {
   "name": "@wangleiddex/hydro-sdk-charts",
-  "version": "0.1.37",
+  "version": "0.1.38",
   "description": "hydro sdk charts",
   "repository": {
     "type": "git",
@@ -8,7 +8,6 @@
   },
   "main": "./dist/index.js",
   "scripts": {
-    "prepare": "npm run clean && npm run build",
     "clean": "rm -rf ./dist",
     "build": "npm run build-js && npm run build-css",
     "build-js": "tsc -p .",
@@ -17,8 +16,8 @@
   "author": "HydroProtocol",
   "license": "Apache-2.0",
   "dependencies": {
-    "bignumber.js": "5",
-    "react-stockcharts": "^0.7.8"
+    "@wlchn/react-stockcharts": "0.7.15",
+    "bignumber.js": "5"
   },
   "devDependencies": {
     "@types/react": "^16.3.17",

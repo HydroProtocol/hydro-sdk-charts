@@ -2,22 +2,22 @@ import React, { PureComponent } from 'react';
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 import { curveMonotoneX } from 'd3-shape';
-import { ChartCanvas, Chart } from 'react-stockcharts';
-import { BarSeries, CandlestickSeries, AreaSeries, LineSeries } from 'react-stockcharts/lib/series';
-import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
+import { ChartCanvas, Chart } from '@wlchn/react-stockcharts';
+import { BarSeries, CandlestickSeries, AreaSeries, LineSeries } from '@wlchn/react-stockcharts/lib/series';
+import { XAxis, YAxis } from '@wlchn/react-stockcharts/lib/axes';
 import {
   EdgeIndicator,
   CrossHairCursor,
   CurrentCoordinate,
   MouseCoordinateX,
   MouseCoordinateY
-} from 'react-stockcharts/lib/coordinates';
-import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { fitDimensions, fitWidth } from 'react-stockcharts/lib/helper';
-import { last } from 'react-stockcharts/lib/utils';
-import { ema } from 'react-stockcharts/lib/indicator';
-import { MovingAverageTooltip, OHLCTooltip } from 'react-stockcharts/lib/tooltip';
-import { ClickCallback } from 'react-stockcharts/lib/interactive';
+} from '@wlchn/react-stockcharts/lib/coordinates';
+import { discontinuousTimeScaleProvider } from '@wlchn/react-stockcharts/lib/scale';
+import { fitDimensions, fitWidth } from '@wlchn/react-stockcharts/lib/helper';
+import { last } from '@wlchn/react-stockcharts/lib/utils';
+import { ema } from '@wlchn/react-stockcharts/lib/indicator';
+import { MovingAverageTooltip, OHLCTooltip } from '@wlchn/react-stockcharts/lib/tooltip';
+import { ClickCallback } from '@wlchn/react-stockcharts/lib/interactive';
 import Select from '../Select';
 import { themeDark, themeLight } from '../variables/variables';
 
@@ -485,6 +485,7 @@ class TradeChart extends PureComponent<Props, any> {
                 labelFill={axisColor}
                 ohlcFormat={v => format(`.${priceDecimals}f`)(v) + '  '}
                 displayTexts={this.getOHLCDisplayTexts()}
+                lastAsDefault={true}
               />
             </Chart>
             <CrossHairCursor stroke={axisColor} />
@@ -601,7 +602,7 @@ class TradeChart extends PureComponent<Props, any> {
   private getOHLCDisplayTexts() {
     const i18n = this.props.i18n || {};
 
-    // https://github.com/rrag/react-stockcharts/blob/master/src/lib/tooltip/OHLCTooltip.js#L96
+    // https://github.com/rrag/@wlchn/react-stockcharts/blob/master/src/lib/tooltip/OHLCTooltip.js#L96
     const displayTexts = {
       d: 'Date: ',
       o: ` ${i18n.open || 'O'}: `,
