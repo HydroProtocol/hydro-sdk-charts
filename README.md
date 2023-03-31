@@ -85,7 +85,7 @@ interface Props {
 
 ![DeepChart-dark](./assets/images/DeepChart-dark.png)
 
-Data format example [TradeChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/js/DeepChartTestData.js)
+Data format example [DeepChart test data](https://github.com/HydroProtocol/hydro-sdk-charts/blob/master/assets/js/DeepChartTestData.js)
 
 ```
 import { DeepChart } from '@wangleiddex/hydro-sdk-charts';
